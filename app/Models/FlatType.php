@@ -10,4 +10,9 @@ class FlatType extends Model
     use HasFactory;
 
     protected $fillable = ['name'];
+
+    public function flat()
+    {
+        return $this->hasMany(Room::class, 'flat_type', 'id');
+    }
 }

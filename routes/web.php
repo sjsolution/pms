@@ -50,10 +50,13 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->namespace('Backend\Admin'
     //Property Rental Monthly routes
     Route::resource('propertyrental', 'PropertyRentalController');
     Route::get('propertyrental/{id}/getroom', 'PropertyRentalController@getroom')->name('propertyrental.getroom');
+
     //Property Rental Daily basis routes
     Route::resource('propertyrentaldaily', 'PropertyRentalDailyController');
     Route::post('propertyrentaldaily/change-bookingstatus', 'PropertyRentalDailyController@changestatus')->name('propertyrentaldaily.changestatus');
     Route::get('propertyrentaldaily/{id}/pdf', 'PropertyRentalDailyController@pdf')->name('propertyrentaldaily.pdf');
+    Route::post('propertyrentaildaily/checkout', 'PropertyRentalDailyController@checkout')->name('propertyrentaldaily.checkout');
+
 
     //Roles And Permission Routes
     Route::get('users/create', 'UserController@create')->name('user.create');

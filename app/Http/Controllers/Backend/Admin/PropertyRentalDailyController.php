@@ -149,8 +149,20 @@ class PropertyRentalDailyController extends Controller
 
     public function checkout(Request $request)
     {
-
-        $checkout = Checkout::create($request->all());
+        $propertyid = PropertyRentalDaily::find($request->propertyrental_id);
+        if($propertyid){
+            $propertyid->status = 2;
+            $propertyid->save();
+            $roomid = $propertyid->room_id;
+            $room = Room::find($roomid);
+            $room->status = !$room->status;
+            $room->save();
+            $checkout = Checkout::create($request->all());
+            if($checkout){
+                return response()->json(['checkout' => $checkout]);
+            }
+        }
+       
     }
 
     public function pdf(Request $request, $id){

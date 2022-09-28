@@ -108,8 +108,15 @@ class FlatTypeController extends Controller
      */
     public function destroy($id)
     {
-        FlatType::destroy($id);
+        $flat = FlatType::find($id);
+        if ($flat && $flat->flat()->count() < 1) {
+            $flat->delete();
+            return response()->json(['status' => 'Record Deleted Successfully']);
+        }
+        else{
+            return response()->json(['status' => 'Record already used it cant be deleted']);
+        }
 
-        return response()->json(['status' => 'Record Deleted Successfully']);
+       
     }
 }

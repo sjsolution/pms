@@ -82,8 +82,11 @@
                                                     <td>{{ $item->total_amount }}</td>
                                                     <td>{{ $item->start_date }}-{{ $item->end_date }}</td>
                                                     <td>
+
                                                         @if ($item->status == 1)
                                                             <span class="badge badge-success">Checked-In</span>
+                                                        @elseif($item->status == 2)
+                                                            <span class="badge badge-info">Checked Out</span>
                                                         @else
                                                             <span class="badge badge-danger">Not Checked-In</span>
                                                         @endif
@@ -133,72 +136,70 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="" method="POST">
-                    @csrf
-                    <div class="modal-body" id="modalbody">
-                        <input type="hidden" name="propertyrental_id" id="propertyrental_id" value="">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="">Total Amount</label>
-                                    <input class="form-control" type="text" name="total_amount" value=""
-                                        id="total_amount">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="">Paid Amount</label>
-                                    <input class="form-control" type="text" name="advance" value=""
-                                        id="advance">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="">Remaining Balance</label>
-                                    <input class="form-control" type="text" name="remaining" value=""
-                                        id="remaining">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="">Additional Charges</label>
-                                    <input class="form-control" type="text" name="additional_charges" value="0"
-                                        id="additional_charges">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="">Select Payment Type</label>
-                                    <select name="payment_type" id="" class="form-control select2">
-                                        <option value="" selected disabled>--Select Payment--</option>
-                                        <option value="cash">Cash</option>
-                                        <option value="credit">Credit</option>
-                                        <option value="card">Card</option>
-                                        <option value="ledger">City Ledger</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p id="message" class="text-danger"></p>
+
+                <div class="modal-body" id="modalbody">
+                    <input type="hidden" name="propertyrental_id" id="propertyrental_id" value="">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="">Total Amount</label>
+                                <input class="form-control" type="text" name="total_amount" value=""
+                                    id="total_amount">
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary"><i class="fa fa-rotate-right"></i> Check
-                            Out</button>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="">Paid Amount</label>
+                                <input class="form-control" type="text" name="advance" value="" id="advance">
+                            </div>
+                        </div>
                     </div>
-                </form>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="">Remaining Balance</label>
+                                <input class="form-control" type="text" name="remaining" value=""
+                                    id="remaining">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="">Additional Charges</label>
+                                <input class="form-control" type="text" name="additional_charges" value="0"
+                                    id="additional_charges">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="">Select Payment Type</label>
+                                <select name="payment_type" id="payment_type" class="form-control select2">
+                                    <option value="" selected disabled>--Select Payment--</option>
+                                    <option value="cash">Cash</option>
+                                    <option value="credit">Credit</option>
+                                    <option value="card">Card</option>
+                                    <option value="ledger">City Ledger</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p id="message" class="text-danger"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="storecheckout()" class="btn btn-primary"><i
+                            class="fa fa-rotate-right"></i> Check
+                        Out</button>
+                </div>
             </div>
         </div>
     </div>
@@ -206,6 +207,17 @@
 @endsection
 @section('scripts')
     <script>
+        $(function() {
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": false,
+                "info": false,
+                "autoWidth": true,
+                "responsive": true,
+            });
+        });
         const ele = (id) => {
             return document.getElementById(id);
         }
@@ -251,6 +263,39 @@
                 var html = `Mr. ${item.name} has some dues outstanding. Do you really want to proceed?`;
                 ele('message').innerText = html;
             }
+        }
+
+        const storecheckout = () => {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            // AJAX request 
+            var data = {
+                "_token": $('input[name="csrf-token"]').val(),
+                "propertyrental_id": ele('propertyrental_id').value,
+                "total_amount": ele('total_amount').value,
+                "advance": ele('advance').value,
+                "remaining": ele('remaining').value,
+                "additional_charges": ele('additional_charges').value,
+                "payment_type": ele('payment_type').value,
+
+            };
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('admin.propertyrentaldaily.checkout') }}",
+                data: data,
+                success: function(response) {
+                    if (response) {
+                        $('#checkoutmodal').modal('hide');
+                        toastr.success('checkout Successfully');
+                        window.setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    }
+                }
+            });
         }
     </script>
 @endsection

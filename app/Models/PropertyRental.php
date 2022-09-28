@@ -11,7 +11,7 @@ class PropertyRental extends Model
 
     protected $fillable = [
         'building_id', 'flat_type', 'room_id', 'tenant_name', 'tenant_contact_no', 'tenant_document_type',
-        'tenant_document_no', 'tenant_company_name', 'monthly_rent', 'rent_due_date', 'contract_start', 'contract_expire'
+        'tenant_document_no', 'tenant_company_name', 'rent_type', 'monthly_rent', 'rent_due_date', 'contract_start', 'contract_expire'
     ];
 
     public function building()
@@ -24,7 +24,8 @@ class PropertyRental extends Model
         return $this->belongsTo(FlatType::class, 'flat_type', 'id');
     }
 
-    public function room(){
+    public function room()
+    {
         return $this->belongsTo(Room::class, 'room_id', 'id');
     }
 }
