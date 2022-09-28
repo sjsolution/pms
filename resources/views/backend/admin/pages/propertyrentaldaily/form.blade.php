@@ -34,6 +34,12 @@
             <div class="container-fluid">
                 <form action="{{ route('admin.propertyrentaldaily.store') }}" method="POST">
                     @csrf
+                    @if (Auth::user())
+                    @php
+                        $user_id = user()->id;
+                    @endphp
+                        <input type="hidden" name="user_id" value="{{isset($user_id) ? $user_id: ''}}">
+                    @endif
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card card-primary">
@@ -44,16 +50,29 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Select Building (Drop Down)</label><span class="text-danger">*</span>
-                                                <select class="form-control select2" name="building_id"
-                                                    style="width: 100%;">
-                                                    <option selected="true" disabled="disabled">--Select Building--</option>
-                                                    @foreach ($building as $item)
-                                                        <option value="{{ $item->id }}"
-                                                            @if (isset($propertyrental->id)) {{ $item->id == $propertyrental->building_id ? 'selected' : '' }} @endif>
-                                                            {{ $item->name }}</option>
-                                                    @endforeach
-                                                </select>
+                                                @if (Auth::user()->hasRole('admin'))
+                                                    <label>Select Building (Drop Down)</label><span
+                                                        class="text-danger">*</span>
+                                                    <select class="form-control select2" name="building_id"
+                                                        style="width: 100%;">
+                                                        <option selected="true" disabled="disabled">--Select Building--
+                                                        </option>
+                                                        @foreach ($building as $item)
+                                                            <option value="{{ $item->id }}"
+                                                                @if (isset($propertyrental->id)) {{ $item->id == $propertyrental->building_id ? 'selected' : '' }} @endif>
+                                                                {{ $item->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                @else
+                                                    <label for="">Building Name</label><span
+                                                        class="text-danger">*</span>
+                                                    <input type="hidden" name="building_id"
+                                                        value="{{ isset($building->id) ? $building->id : '' }}"
+                                                        id="">
+                                                    <input type="text" readonly class="form-control"
+                                                        value="{{ isset($building->name) ? $building->name : '' }}">
+                                                @endif
+
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -116,7 +135,8 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="total_amount">Total Amount</label><span class="text-danger">*</span>
+                                                <label for="total_amount">Total Amount</label><span
+                                                    class="text-danger">*</span>
                                                 <input type="text" required name="total_amount" value=""
                                                     class="form-control" id="total_amount" placeholder="Total Amount">
                                                 @if ($errors->any())
@@ -126,7 +146,8 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="advance">Advance Payment</label><span class="text-danger">*</span>
+                                                <label for="advance">Advance Payment</label><span
+                                                    class="text-danger">*</span>
                                                 <input type="text" required name="advance" value=""
                                                     class="form-control" id="advance" placeholder="Advance Payment">
                                                 @if ($errors->any())
@@ -171,7 +192,8 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="">Guest Full Name</label><span class="text-danger">*</span>
+                                                <label for="">Guest Full Name</label><span
+                                                    class="text-danger">*</span>
                                                 <input type="text" required name="name" value=""
                                                     class="form-control" id="name" placeholder="Guest Full Name">
                                             </div>
@@ -202,14 +224,16 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="">Document No</label><span class="text-danger">*</span>
+                                                <label for="">Document No</label><span
+                                                    class="text-danger">*</span>
                                                 <input type="text" required name="document_no" value=""
                                                     class="form-control" id="document_no" placeholder="Document No">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="">Date Of Expiry</label><span class="text-danger">*</span>
+                                                <label for="">Date Of Expiry</label><span
+                                                    class="text-danger">*</span>
                                                 <input type="date" required name="expiry_date" value=""
                                                     class="form-control" id="expiry_date" placeholder="Date Of Expiry">
                                             </div>
@@ -219,14 +243,16 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="">Nationality</label><span class="text-danger">*</span>
+                                                <label for="">Nationality</label><span
+                                                    class="text-danger">*</span>
                                                 <input type="text" required name="nationality" value=""
                                                     class="form-control" id="nationality" placeholder="Nationality">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="">Company Name</label><span class="text-danger">*</span>
+                                                <label for="">Company Name</label><span
+                                                    class="text-danger">*</span>
                                                 <input type="text" required name="company_name" value=""
                                                     class="form-control" id="company_name" placeholder="Company Name">
                                             </div>
@@ -243,7 +269,8 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="">Document Type</label><span class="text-danger">*</span>
+                                                <label for="">Document Type</label><span
+                                                    class="text-danger">*</span>
                                                 <select name="document_type" class="form-control select2" id="">
                                                     <option value="" selected disabled>--Select Document Type--
                                                     </option>

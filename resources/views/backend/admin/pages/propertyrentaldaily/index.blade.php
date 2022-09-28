@@ -97,11 +97,12 @@
                                                         <a class="btn btn-success"
                                                             onclick="checkout({{ $item }});"><i
                                                                 class="fa fa-rotate-right"></i></a>
-                                                        <a class="btn btn-info"
-                                                        onclick="frames['frame'].print()">
+                                                        <a class="btn btn-info" onclick="frames['frame'].print()">
                                                             <i class="fa fa-print"></i></a>
                                                     </td>
                                                 </tr>
+                                                <iframe src="{{ route('admin.propertyrentaldaily.pdf', $item->id) }}"
+                                                    style="display:none;" name="frame"></iframe>
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -149,7 +150,8 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="">Paid Amount</label>
-                                    <input class="form-control" type="text" name="advance" value="" id="advance">
+                                    <input class="form-control" type="text" name="advance" value=""
+                                        id="advance">
                                 </div>
                             </div>
                         </div>
@@ -201,14 +203,6 @@
         </div>
     </div>
 
-    <div class="" id="pdf">
-        <div class="row">
-            <div class="col-md-12">
-                <h1 id="building_name" class="mt-4"></h1>
-            </div>
-        </div>
-    </div>
-    <iframe src="{{ route('admin.propertyrentaldaily.pdf', $item->id) }}" style="display:none;" name="frame"></iframe>
 @endsection
 @section('scripts')
     <script>

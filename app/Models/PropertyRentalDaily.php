@@ -10,7 +10,7 @@ class PropertyRentalDaily extends Model
     use HasFactory;
 
     protected $fillable = [
-        'building_id', 'flat_type', 'room_id', 'total_days', 'start_date', 'end_date',
+        'user_id','building_id', 'flat_type', 'room_id', 'total_days', 'start_date', 'end_date',
         'total_amount', 'advance', 'room_rate', 'name', 'pax', 'vehicle', 'mobile_no', 'document_no',
         'expiry_date', 'nationality', 'company_name', 'dob', 'document_type', 'payment_type',
         'board_type', 'place_birth', 'first_child_dob', 'sec_chhild_dob', 'infants', 'email',
