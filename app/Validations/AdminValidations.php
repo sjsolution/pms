@@ -57,4 +57,26 @@ class AdminValidations
             return $validator;
         }
     }
+
+    public static function userregister($request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => 'required',
+                'email'=> 'required',
+                'property_id' => 'required',
+                'role' => 'required',
+            ],
+            [
+                'name.required' => 'Enter Name',
+                'email.required' => 'Email is required',
+                'property_id.required' => 'Select Building',
+                'role.required' => 'Select Role',
+            ]
+        );
+        if ($validator->fails()) {
+            return $validator;
+        }
+    }
 }

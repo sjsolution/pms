@@ -8,7 +8,9 @@ use App\Models\Checkout;
 use App\Models\FlatType;
 use App\Models\PropertyRentalDaily;
 use App\Models\Room;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use PDF;
 
 class PropertyRentalDailyController extends Controller
@@ -33,7 +35,13 @@ class PropertyRentalDailyController extends Controller
      */
     public function create()
     {
-        $building = Building::all();
+        if(Auth::user()->hasRole('admin')){
+            $building = Building::all();     
+        }else{
+            $user = User::where('id',user()->id)->first();
+            $building = Building::where('id',$user->property_id)->first();
+        }
+        
         $flattype = FlatType::all();
         $room = Room::where('status', 1)->get();
         return view('backend.admin.pages.propertyrentaldaily.form', compact('building', 'flattype', 'room'));

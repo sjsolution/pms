@@ -54,4 +54,14 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->namespace('Backend\Admin'
     Route::resource('propertyrentaldaily', 'PropertyRentalDailyController');
     Route::post('propertyrentaldaily/change-bookingstatus', 'PropertyRentalDailyController@changestatus')->name('propertyrentaldaily.changestatus');
     Route::get('propertyrentaldaily/{id}/pdf', 'PropertyRentalDailyController@pdf')->name('propertyrentaldaily.pdf');
+
+    //Roles And Permission Routes
+    Route::get('users/create', 'UserController@create')->name('user.create');
+    Route::post('user/store', 'UserController@store')->name('user.store');
+    Route::get('users', 'UserController@index')->name('user.index');
+    Route::get('user/{id}/edit', 'UserController@edit')->name('user.edit');
+    Route::delete('user/{id}/destroy', 'UserController@destroy')->name('user.destroy');
+
+    //Document route
+    Route::resource('document', 'DocumentController');
 });

@@ -36,6 +36,7 @@
             </a>
           </li>
           <br>
+          @if (Auth::user()->hasRole('admin'))
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon far fa-building"></i>
@@ -61,6 +62,7 @@
               </li>
             </ul>
           </li>
+
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon far fa-building"></i>
@@ -111,6 +113,8 @@
               </li>
             </ul>
           </li>
+          @endif
+          
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon far fa-building"></i>
@@ -136,6 +140,58 @@
               </li>
             </ul>
           </li>
+          @if (Auth::user()->hasRole('admin'))
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fa fa-users"></i>
+              <p>
+                Users
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right"></span>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              
+              <li class="nav-item">
+                <a href="{{route('admin.user.create')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Create</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{route('admin.user.index')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>List</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fa fa-file"></i>
+              <p>
+                Documents
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right"></span>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              
+              <li class="nav-item">
+                <a href="{{route('admin.document.create')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Create</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{route('admin.user.index')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>List</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          @endif
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
