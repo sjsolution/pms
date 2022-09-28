@@ -35,10 +35,10 @@
                 <form action="{{ route('admin.propertyrentaldaily.store') }}" method="POST">
                     @csrf
                     @if (Auth::user())
-                    @php
-                        $user_id = user()->id;
-                    @endphp
-                        <input type="hidden" name="user_id" value="{{isset($user_id) ? $user_id: ''}}">
+                        @php
+                            $user_id = user()->id;
+                        @endphp
+                        <input type="hidden" name="user_id" value="{{ isset($user_id) ? $user_id : '' }}">
                     @endif
                     <div class="row">
                         <div class="col-md-12">
@@ -127,8 +127,8 @@
                                         </div>
                                         <div class="col-md-4">
                                             <label for="">End Date</label><span class="text-danger">*</span>
-                                            <input type="text" id="end_date" name="end_date" class="form-control"
-                                                value="" />
+                                            <input type="text" readonly id="end_date" name="end_date"
+                                                class="form-control" value="" />
                                         </div>
                                     </div>
 
@@ -390,9 +390,13 @@
             return document.getElementById(id);
         }
         $(function() {
-
+            var d = new Date();
+                d.setDate(d.getDate() - 1);
+                d = new Date(d);
             $('#start_date').daterangepicker({
+              
                 autoUpdateInput: false,
+                minDate: d,
                 locale: {
                     cancelLabel: 'Clear'
                 }
@@ -477,7 +481,7 @@
                                 var id = response['room'][i].id;
                                 var room = response['room'][i].room_no;
                                 var option = `<option value="${id}">${room}</option>`;
-                                ele('room_id').innerHTML = option;
+                                ele('room_id').innerHTML += option;
                             }
                         }
                     }

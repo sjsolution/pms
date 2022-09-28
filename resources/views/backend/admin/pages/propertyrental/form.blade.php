@@ -183,19 +183,32 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="monthly_rent">Monthly Rent</label><span
-                                                    class="text-danger">*</span>
-                                                <input type="text" name="monthly_rent"
-                                                    value="{{ isset($propertyrental->monthly_rent) ? $propertyrental->monthly_rent : '' }}"
-                                                    class="form-control" id="monthly_rent" placeholder="Monthly rent">
-                                                @if ($errors->any())
-                                                    <p class="text-danger">{{ $errors->first('monthly_rent') }}</p>
-                                                @endif
+                                                <label for="monthly_rent">Rent Type</label><span
+                                                class="text-danger">*</span>
+                                                <select name="rent_type" id="" class="form-control select2">
+                                                 <option value="" selected disabled>--Select RentType--</option>
+                                                 <option value="monthly">Monthly</option>
+                                                 <option value="quarterly">Quarterly</option>
+                                                 <option value="biyearly">Biyearly</option>
+                                                 <option value="yearly">Yearly</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="monthly_rent">Rent</label><span
+                                                    class="text-danger">*</span>
+                                                <input type="text" name="monthly_rent"
+                                                    value="{{ isset($propertyrental->monthly_rent) ? $propertyrental->monthly_rent : '' }}"
+                                                    class="form-control" id="monthly_rent" placeholder="Rent">
+                                                @if ($errors->any())
+                                                    <p class="text-danger">{{ $errors->first('monthly_rent') }}</p>
+                                                @endif
+                                            </div>
+                                        </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="rent_due_date">Rent Due Date</label><span
@@ -208,6 +221,7 @@
                                                 @endif
                                             </div>
                                         </div>
+
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="contract_start">Contract Start</label><span
@@ -221,6 +235,9 @@
                                                 @endif
                                             </div>
                                         </div>
+
+                                    </div>
+                                    <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="contract_expire">Contract Expire</label><span
@@ -236,21 +253,22 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- /.card-body -->
-
-                                <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </div>
-                            </form>
                         </div>
+                        <!-- /.card-body -->
 
-
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                        </form>
                     </div>
-                    <!--/.col (left) -->
+
+
                 </div>
-                <!-- /.row -->
-            </div><!-- /.container-fluid -->
-        </section>
+                <!--/.col (left) -->
+            </div>
+            <!-- /.row -->
+    </div><!-- /.container-fluid -->
+    </section>
     </div>
     <!-- /.content -->
 @endsection
@@ -291,7 +309,7 @@
                                 var id = response['room'][i].id;
                                 var room = response['room'][i].room_no;
                                 var option = `<option value="${id}">${room}</option>`;
-                                ele('room_id').innerHTML = option;
+                                ele('room_id').innerHTML += option;
                             }
                         }
                     }
