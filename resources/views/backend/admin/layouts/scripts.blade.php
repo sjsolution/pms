@@ -29,8 +29,6 @@
 <script src="{{ asset('public/hms/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('public/hms/dist/js/adminlte.js') }}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{ asset('public/hms/dist/js/pages/dashboard.js') }}"></script>
 {{-- Toast --}}
 <script src="{{asset('public/hms/toast/js/toastr.min.js')}}"></script>
 {{-- Sweet Alert --}}
