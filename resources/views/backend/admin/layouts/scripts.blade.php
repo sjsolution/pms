@@ -29,10 +29,8 @@
 <script src="{{ asset('public/hms/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('public/hms/dist/js/adminlte.js') }}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{ asset('public/hms/dist/js/pages/dashboard.js') }}"></script>
 {{-- Toast --}}
-<script src="{{asset('public/hms/toast/js/toastr.min.js')}}"></script>
+<script src="{{ asset('public/hms/toast/js/toastr.min.js') }}"></script>
 {{-- Sweet Alert --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
@@ -41,5 +39,8 @@
         //Initialize Select2 Elements
         $('.select2').select2()
     })
+    const ele = (id) => {
+        return document.getElementById(id);
+    }
 </script>
 @yield('scripts')

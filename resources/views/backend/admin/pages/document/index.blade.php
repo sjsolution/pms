@@ -1,6 +1,33 @@
 @extends('backend.admin.layouts.master')
 @section('title', 'Document List')
 @section('content')
+    <script>
+        const ele = (id) => {
+            return document.getElementById(id);
+        }
+
+        function loadData2(document) {
+            console.log(document);
+            var document = JSON.parse(document);
+            //calculate days
+            var date1 = new Date();
+            var date2 = new Date(document.expiry_date);
+            var Difference_In_Time = date2.getTime() - date1.getTime();
+
+            //To calculate the no. of days between two dates
+            var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
+            if (Difference_In_Days <= document.days_alert) {
+                $('#expiremodal').modal('show');
+
+                var text = `Your Document with title ${document.title} will expire after ${document.days_alert} days.`;
+
+                ele('modaltext').innerText = text;
+
+            }
+
+        }
+    </script>
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -58,8 +85,10 @@
                                                 <input type="hidden" class="delete_val" value="{{ $row->id }}">
                                                 <td>{{ $row->title }}</td>
                                                 <td>{{ $row->expiry_date }}</td>
-                                                <td><a class="btn btn-info" href="{{ URL::asset('public/documents/' . $row->image) }}" target="_blank"><i
-                                                            class="fas fa fa-eye" aria-hidden="true"></i></a></td>
+                                                <td><a class="btn btn-info"
+                                                        href="{{ URL::asset('public/documents/' . $row->image) }}"
+                                                        target="_blank"><i class="fas fa fa-eye" aria-hidden="true"></i></a>
+                                                </td>
                                                 <td><a href="{{ route('admin.document.edit', $row->id) }}"
                                                         class="btn btn-primary"><i class="fas fa-pencil-alt"
                                                             aria-hidden="true"></i></a>
@@ -67,6 +96,8 @@
                                                             class="fas fa-trash"></i></a>
                                                 </td>
                                             </tr>
+                                            <iframe style="display: none" onload="loadData2(`{{ $row }}`)"
+                                                frameborder="0"></iframe>
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -86,6 +117,27 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="expiremodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Document Alert</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="modaltext"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('scripts')
     <script>
@@ -130,7 +182,7 @@
                         if (willDelete) {
 
                             var data = {
-                                "_token": $('input[name="csrf-token"]').val(),
+                                "_token": "{{ csrf_token() }}",
                                 "id": delete_id,
                             };
 
@@ -159,5 +211,7 @@
 
             });
         });
+
+        //expire alert script
     </script>
 @endsection

@@ -47,8 +47,15 @@
                                     </div>
                                 @endif
                                 @csrf
+                                <input type="hidden" name="property_rental" value="0">
                                 @if (isset($propertyrental->id))
                                     <input type="hidden" id="id" name="id" value="{{ $propertyrental->id }}">
+                                @endif
+                                @if (Auth::user())
+                                    @php
+                                        $user_id = user()->id;
+                                    @endphp
+                                    <input type="hidden" name="user_id" value="{{ isset($user_id) ? $user_id : '' }}">
                                 @endif
                                 <div class="card-body">
                                     <div class="row">
@@ -184,13 +191,13 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="monthly_rent">Rent Type</label><span
-                                                class="text-danger">*</span>
+                                                    class="text-danger">*</span>
                                                 <select name="rent_type" id="" class="form-control select2">
-                                                 <option value="" selected disabled>--Select RentType--</option>
-                                                 <option value="monthly">Monthly</option>
-                                                 <option value="quarterly">Quarterly</option>
-                                                 <option value="biyearly">Biyearly</option>
-                                                 <option value="yearly">Yearly</option>
+                                                    <option value="" selected disabled>--Select RentType--</option>
+                                                    <option value="monthly">Monthly</option>
+                                                    <option value="quarterly">Quarterly</option>
+                                                    <option value="biyearly">Biyearly</option>
+                                                    <option value="yearly">Yearly</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -199,8 +206,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="monthly_rent">Rent</label><span
-                                                    class="text-danger">*</span>
+                                                <label for="monthly_rent">Rent</label><span class="text-danger">*</span>
                                                 <input type="text" name="monthly_rent"
                                                     value="{{ isset($propertyrental->monthly_rent) ? $propertyrental->monthly_rent : '' }}"
                                                     class="form-control" id="monthly_rent" placeholder="Rent">
@@ -226,7 +232,7 @@
                                             <div class="form-group">
                                                 <label for="contract_start">Contract Start</label><span
                                                     class="text-danger">*</span>
-                                                <input type="date" name="contract_start"
+                                                <input type="date" name="start_date"
                                                     value="{{ isset($propertyrental->contract_start) ? $propertyrental->contract_start : '' }}"
                                                     class="form-control" id="contract_start"
                                                     placeholder="Contract Start">
@@ -242,7 +248,7 @@
                                             <div class="form-group">
                                                 <label for="contract_expire">Contract Expire</label><span
                                                     class="text-danger">*</span>
-                                                <input type="date" name="contract_expire"
+                                                <input type="date" name="end_date"
                                                     value="{{ isset($propertyrental->contract_expire) ? $propertyrental->contract_expire : '' }}"
                                                     class="form-control" id="contract_expire"
                                                     placeholder="Contract Expire">
