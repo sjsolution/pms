@@ -234,7 +234,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "{{ route('admin.propertyrentaldaily.changestatus') }}",
+                url: "{{ route('admin.propertyrental.changestatus') }}",
                 data: data,
                 success: function(response) {
                     if (response.propertyrentaldaily) {
@@ -273,7 +273,7 @@
             });
             // AJAX request 
             var data = {
-                "_token": $('input[name="csrf-token"]').val(),
+                "_token": "{{ csrf_token() }}",
                 "propertyrental_id": ele('propertyrental_id').value,
                 "total_amount": ele('total_amount').value,
                 "advance": ele('advance').value,
@@ -284,7 +284,7 @@
             };
             $.ajax({
                 type: 'POST',
-                url: "{{ route('admin.propertyrentaldaily.checkout') }}",
+                url: "{{ route('admin.propertyrental.checkout') }}",
                 data: data,
                 success: function(response) {
                     if (response) {

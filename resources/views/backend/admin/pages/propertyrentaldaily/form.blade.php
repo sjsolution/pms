@@ -32,8 +32,9 @@
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
-                <form action="{{ route('admin.propertyrentaldaily.store') }}" method="POST">
+                <form action="{{ route('admin.propertyrental.store') }}" method="POST">
                     @csrf
+                    <input type="hidden" name="property_rental" value="1">
                     @if (Auth::user())
                         @php
                             $user_id = user()->id;

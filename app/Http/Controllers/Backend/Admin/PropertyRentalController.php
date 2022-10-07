@@ -21,7 +21,7 @@ class PropertyRentalController extends Controller
      */
     public function index()
     {
-        $propertyrental = PropertyRental::all();
+        $propertyrental = PropertyRental::where('property_rental',0)->orderBy('id','desc')->get();
         return view('backend.admin.pages.propertyrental.index', compact('propertyrental'));
     }
 
@@ -71,7 +71,12 @@ class PropertyRentalController extends Controller
                         $room->save();
                     }
                     $request->session()->flash('msg', 'Created Sucessfully!!');
-                    return redirect()->route('admin.propertyrental.index');
+                    if($request->property_rental == 0){
+                        return redirect()->route('admin.propertyrental.index');
+                    }else{
+                        return redirect()->route('admin.propertyrentaldaily.index');
+                    }
+                   
                 }
             }
         } catch (\Illuminate\Database\QueryException $ex) {

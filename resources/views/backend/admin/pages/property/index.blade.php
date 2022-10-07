@@ -250,7 +250,7 @@
                         if (willDelete) {
 
                             var data = {
-                                "_token": $('input[name="csrf-token"]').val(),
+                                "_token": "{{ csrf_token() }}",
                                 "id": delete_id,
                             };
 

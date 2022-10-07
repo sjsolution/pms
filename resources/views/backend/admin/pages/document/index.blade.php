@@ -7,6 +7,7 @@
         }
 
         function loadData2(document) {
+            console.log(document);
             var document = JSON.parse(document);
             //calculate days
             var date1 = new Date();
@@ -181,7 +182,7 @@
                         if (willDelete) {
 
                             var data = {
-                                "_token": $('input[name="csrf-token"]').val(),
+                                "_token": "{{ csrf_token() }}",
                                 "id": delete_id,
                             };
 

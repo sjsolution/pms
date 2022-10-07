@@ -67,4 +67,12 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->namespace('Backend\Admin'
 
     //Document route
     Route::resource('document', 'DocumentController');
+
+
+    //Report Routes
+    Route::get('period-wise-report', 'ReportController@index')->name('report.index');
+    Route::post('search-period-wise', 'ReportController@searchperiod')->name('report.periodwise');
+
+    Route::get('property-status', 'ReportController@propertystatus')->name('report.prostatus');
+    Route::post('get-property-status', 'ReportController@getpropertystatus')->name('report.getpropertystatus');
 });

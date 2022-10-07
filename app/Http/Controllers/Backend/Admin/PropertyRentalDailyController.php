@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Building;
 use App\Models\Checkout;
 use App\Models\FlatType;
+use App\Models\PropertyRental;
 use App\Models\PropertyRentalDaily;
 use App\Models\Room;
 use App\Models\User;
@@ -22,7 +23,7 @@ class PropertyRentalDailyController extends Controller
      */
     public function index()
     {
-        $propertyrentaldaily = PropertyRentalDaily::with('building')->orderBy('id', 'desc')->get();
+        $propertyrentaldaily = PropertyRental::where('property_rental',1)->orderBy('id', 'desc')->get();
         if ($propertyrentaldaily) {
             return view('backend.admin.pages.propertyrentaldaily.index', compact('propertyrentaldaily'));
         }

@@ -192,6 +192,31 @@
             </ul>
           </li>
           @endif
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-duotone fa-flag"></i>
+              <p>
+                Reports
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right"></span>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              
+              <li class="nav-item">
+                <a href="{{route('admin.report.index')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Period wise </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{route('admin.report.prostatus')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Property Status</p>
+                </a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
