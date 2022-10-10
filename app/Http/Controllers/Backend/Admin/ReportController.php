@@ -48,4 +48,42 @@ class ReportController extends Controller
         $room = Room::where('building_id', $building_id)->orderBy('id', 'desc')->get();
         return response()->json(['room' => $room, 'mesg' => 'fetched successfully']);
     }
+
+    public function propertywise()
+    {
+        $building = Building::all();
+        return view('backend.admin.pages.report.propertywise', compact('building'));
+    }
+
+    public function getpropertywise(Request $request)
+    {
+        $building_id = $request->building_id;
+        $property = PropertyRental::with('building', 'flattype', 'room')->where(['building_id' => $building_id, 'property_rental' => 0])->orderBy('id', 'desc')->get();
+        return response()->json(['property' => $property, 'mesg' => 'fetched successfully']);
+    }
+
+    public function receiveable_status()
+    {
+        $building = Building::all();
+        return view('backend.admin.pages.report.receiveable_status', compact('building'));
+    }
+
+    public function getreceiveable_status(Request $request)
+    {
+        $building_id = $request->building_id;
+        $property = PropertyRental::with('building', 'flattype', 'room')->where(['building_id' => $building_id])->orderBy('id', 'desc')->get();
+        return response()->json(['property' => $property, 'mesg' => 'fetched successfully']);
+    }
+
+    public function paymentproperty()
+    {
+        $building = Building::all();
+        return view('backend.admin.pages.report.payment_property', compact('building'));
+    }
+    public function getpaymentproperty(Request $request)
+    {
+        $building_id = $request->building_id;
+        $property = PropertyRental::with('building', 'flattype', 'room')->where(['building_id' => $building_id, 'property_rental' => 0])->orderBy('id', 'desc')->get();
+        return response()->json(['property' => $property, 'mesg' => 'fetched successfully']);
+    }
 }

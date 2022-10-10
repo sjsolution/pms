@@ -75,4 +75,13 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->namespace('Backend\Admin'
 
     Route::get('property-status', 'ReportController@propertystatus')->name('report.prostatus');
     Route::post('get-property-status', 'ReportController@getpropertystatus')->name('report.getpropertystatus');
+
+    Route::get('property-wise-report', 'ReportController@propertywise')->name('report.propertywise');
+    Route::post('get-property-wise-report', 'ReportController@getpropertywise')->name('report.getpropertywise');
+
+    Route::get('property-receiveabel-status', 'ReportController@receiveable_status')->name('report.receiveable_status');
+    Route::post('get-property-receiveabel-status', 'ReportController@getreceiveable_status')->name('report.getreceiveable_status');
+
+    Route::get('payment-report-properties', 'ReportController@paymentproperty')->name('report.paymentproperty');
+    Route::post('get-payment-report-properties', 'ReportController@getpaymentproperty')->name('report.getpaymentproperty');
 });
