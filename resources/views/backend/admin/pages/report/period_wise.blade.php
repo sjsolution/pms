@@ -72,7 +72,8 @@
                                             <th>Flat no</th>
                                             <th>Guest Name</th>
                                             <th>Check IN/Out</th>
-                                            <th>Amount Receiveable/Payable</th>
+                                            <th>Payable</th>
+                                            <th>Receiveable</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tbody">
@@ -152,13 +153,16 @@
                             var id = response['property'][i].id;
                             var flat_type = response['property'][i].room.room_no;
                             var property_rental = response['property'][i].property_rental;
-                            if (property_rental == 0) {
-                                var name = response['property'][i].tenant_name;
-                            } else {
-                                var name = response['property'][i].name;
-                            }
-
+                            var name = response['property'][i].name;
                             var status = response['property'][i].status;
+                            var payable = response['property'][i].advance;
+
+                            var total_amount = response['property'][i].total_amount;
+                            if(payable == total_amount){
+                                var receiveable = '0';
+                            }else{
+                                var receiveable = total_amount - advance;
+                            }
                             if (status == 1) {
                                 var status =`<span class="badge badge-success">Checked-In </span>`;
                             } else {
@@ -170,7 +174,8 @@
                                                 <td>${flat_type}</td>
                                                 <td>${name}</td>
                                                 <td>${status}</td>
-                                                <td>${amount}</td>
+                                                <td>${payable}</td>
+                                                <td>${receiveable}</td>
                                                 </tr>
                                         `;
                             ele('tbody').innerHTML += html;

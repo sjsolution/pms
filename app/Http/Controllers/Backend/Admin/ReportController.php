@@ -27,7 +27,7 @@ class ReportController extends Controller
         $toDate = $date[1];
         $start = Carbon::parse($fromDate)->toDateString();
         $end = Carbon::parse($toDate)->toDateString();
-        $property = PropertyRental::with('room')->where('building_id', $building_id)
+        $property = PropertyRental::with('room')->where(['building_id'=>$building_id, 'property_rental'=> 1])
             ->whereBetween('created_at', [$start, $end])->get();
         $monthly_total = $property->sum('monthly_rent');
         $daily_total = $property->sum('total_amount');

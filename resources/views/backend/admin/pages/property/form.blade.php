@@ -186,9 +186,6 @@
 
 @section('scripts')
     <script>
-        const ele = (id) => {
-            return document.getElementById(id);
-        }
         const buildmodal = () => {
 
             $(document).ready(function() {
