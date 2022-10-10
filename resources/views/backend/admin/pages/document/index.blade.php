@@ -2,9 +2,6 @@
 @section('title', 'Document List')
 @section('content')
     <script>
-        const ele = (id) => {
-            return document.getElementById(id);
-        }
 
         function loadData2(document) {
             console.log(document);

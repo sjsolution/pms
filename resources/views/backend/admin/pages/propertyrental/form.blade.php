@@ -232,7 +232,7 @@
                                             <div class="form-group">
                                                 <label for="contract_start">Contract Start</label><span
                                                     class="text-danger">*</span>
-                                                <input type="date" name="start_date"
+                                                <input type="date" name="contract_start"
                                                     value="{{ isset($propertyrental->contract_start) ? $propertyrental->contract_start : '' }}"
                                                     class="form-control" id="contract_start"
                                                     placeholder="Contract Start">
@@ -248,7 +248,7 @@
                                             <div class="form-group">
                                                 <label for="contract_expire">Contract Expire</label><span
                                                     class="text-danger">*</span>
-                                                <input type="date" name="end_date"
+                                                <input type="date" name="contract_expire"
                                                     value="{{ isset($propertyrental->contract_expire) ? $propertyrental->contract_expire : '' }}"
                                                     class="form-control" id="contract_expire"
                                                     placeholder="Contract Expire">
@@ -281,9 +281,6 @@
 
 @section('scripts')
     <script>
-        const ele = (id) => {
-            return document.getElementById(id);
-        }
         const get_url = (url, id) => {
             return url.replace('item_id', id);
         }

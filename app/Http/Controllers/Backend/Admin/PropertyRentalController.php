@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Backend\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\{
     Building,
+    Checkout,
     FlatType,
     PropertyRegister,
     PropertyRental,
     Room
 };
 use Illuminate\Http\Request;
-
 class PropertyRentalController extends Controller
 {
     /**
@@ -92,7 +92,10 @@ class PropertyRentalController extends Controller
      */
     public function show($id)
     {
-        //
+        $propertyrentaldaily = PropertyRental::find($id);
+        if ($propertyrentaldaily) {
+            return view('backend.admin.pages.propertyrental.show', compact('propertyrentaldaily'));
+        }
     }
 
     /**
@@ -121,7 +124,7 @@ class PropertyRentalController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
     }
 
     /**
@@ -142,5 +145,40 @@ class PropertyRentalController extends Controller
         if ($room) {
             return response()->json(['room'=>$room]);
         }
+    }
+
+    public function changestatus(Request $request)
+    {
+        $propertyrentaldaily = PropertyRental::find($request->id);
+        if ($propertyrentaldaily) {
+            $propertyrentaldaily->status = !$propertyrentaldaily->status;
+            $propertyrentaldaily->save();
+
+            return response()->json(['propertyrentaldaily' => $propertyrentaldaily]);
+        }
+    }
+
+    public function checkout(Request $request)
+    {
+        $propertyid = PropertyRental::find($request->propertyrental_id);
+        if($propertyid){
+            $propertyid->status = 2;
+            $propertyid->save();
+            $roomid = $propertyid->room_id;
+            $room = Room::find($roomid);
+            $room->status = !$room->status;
+            $room->save();
+            $checkout = Checkout::create($request->all());
+            if($checkout){
+                return response()->json(['checkout' => $checkout]);
+            }
+        }
+       
+    }
+
+    public function pdf(Request $request, $id){
+        $propertyrentaldaily = PropertyRental::find($id);
+
+        return view('backend.admin.pages.propertyrental.pdf_view', compact('propertyrentaldaily'));
     }
 }

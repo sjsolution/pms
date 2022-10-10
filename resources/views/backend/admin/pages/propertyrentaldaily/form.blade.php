@@ -387,9 +387,6 @@
 @section('scripts')
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script type="text/javascript">
-        const ele = (id) => {
-            return document.getElementById(id);
-        }
         $(function() {
             var d = new Date();
                 d.setDate(d.getDate() - 1);

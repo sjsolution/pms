@@ -166,7 +166,7 @@
                             if (status == 1) {
                                 var status =`<span class="badge badge-success">Checked-In </span>`;
                             } else {
-                               var status = `<span class="badge badge-danger">Not Checked-In </span>`;
+                               var status = `<span class="badge badge-danger">Checked Out</span>`;
                             }
                             var amount = response['property'][i].property_rental;
                             var html = `<tr>

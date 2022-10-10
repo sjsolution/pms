@@ -91,7 +91,7 @@
                                                             <span class="badge badge-danger">Not Checked-In</span>
                                                         @endif
                                                     </td>
-                                                    <td><a href="{{ route('admin.propertyrentaldaily.show', $item->id) }}"
+                                                    <td><a href="{{ route('admin.propertyrental.show', $item->id) }}"
                                                             class="btn btn-primary"><i class="fas fa fa-eye"
                                                                 aria-hidden="true"></i></a>
                                                         <a class="btn btn-danger"
@@ -104,7 +104,7 @@
                                                             <i class="fa fa-print"></i></a>
                                                     </td>
                                                 </tr>
-                                                <iframe src="{{ route('admin.propertyrentaldaily.pdf', $item->id) }}"
+                                                <iframe src="{{ route('admin.propertyrental.pdf', $item->id) }}"
                                                     style="display:none;" name="frame"></iframe>
                                             @endforeach
                                         </tbody>
@@ -218,9 +218,6 @@
                 "responsive": true,
             });
         });
-        const ele = (id) => {
-            return document.getElementById(id);
-        }
         const updatebooking = (id) => {
             $.ajaxSetup({
                 headers: {
