@@ -45,78 +45,72 @@
                                     <div class="alert alert-success" style="margin-top: 5px">{{ Session::get('msg') }}</div>
                                 </div>
                             @endif
-                            <form action="{{ route('admin.property.bulk-action') }}" method="post" id="target">
-                                @csrf
-                                <div class="card-header">
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <a href="{{ route('admin.property.create') }}" class="btn btn-primary"
-                                                style="float: left">ADD+</a>
-                                        </div>
-                                        @if (isset($property) && $property->count() > 0)
-                                            <input type="hidden" id="changeStatus" name="status" value="">
-                                            <div class="col-md-4 text-right">
-                                                <a class="btn btn-danger" onclick="addStatus('delete')"
-                                                    style="margin-left: 18px;">Delete</a>
-                                            </div>
-                                    </div>
-                                    @endif
-                                </div>
-                                <!-- /.card-header -->
-                                <div class="card-body">
-                                    <table id="example2" class="table table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Flat No</th>
-                                                <th>Flat Type</th>
-                                                <th>Guest Name</th>
-                                                <th>Paid Amount</th>
-                                                <th>Total Amount</th>
-                                                <th>Room Status</th>
-                                                <th>Booking Status</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($propertyrentaldaily as $item)
-                                                <tr>
-                                                    <input type="hidden" class="delete_val" value="{{ $item->id }}">
-                                                    <td>{{ $item->room->room_no }}</td>
-                                                    <td>{{ $item->flattype->name }}</td>
-                                                    <td>{{ $item->name }}</td>
-                                                    <td>{{ $item->advance }}</td>
-                                                    <td>{{ $item->total_amount }}</td>
-                                                    <td>{{ $item->start_date }}-{{ $item->end_date }}</td>
-                                                    <td>
 
-                                                        @if ($item->status == 1)
-                                                            <span class="badge badge-success">Checked-In</span>
-                                                        @elseif($item->status == 2)
-                                                            <span class="badge badge-info">Checked Out</span>
-                                                        @else
-                                                            <span class="badge badge-danger">Not Checked-In</span>
-                                                        @endif
-                                                    </td>
-                                                    <td><a href="{{ route('admin.propertyrental.show', $item->id) }}"
-                                                            class="btn  btn-info " title="Show"><i class="fas fa fa-eye"
-                                                                aria-hidden="true"></i></a>
-                                                        <a class="btn btn-success "
-                                                            onclick="checkout({{ $item }});" title="Checkout"><i
-                                                                class="fa fa-rotate-right"></i></a>
-                                                        <a class="btn btn-dark " onclick="frames['frame'].print()" title="Print">
-                                                            <i class="fa fa-print"></i></a>
-                                                        <a href="{{ route('admin.propertyrental.edit', $item->id) }}"
-                                                            class="btn btn-secondary" title="Edit">
-                                                            <i class="fa fa-pencil"></i></a>
-                                                    </td>
-                                                </tr>
-                                                <iframe src="{{ route('admin.propertyrental.pdf', $item->id) }}"
-                                                    style="display:none;" name="frame"></iframe>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <a href="{{ route('admin.propertyrentaldaily.create') }}" class="btn btn-primary"
+                                            style="float: left">ADD+</a>
+                                    </div>
+
                                 </div>
-                            </form>
+
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Flat No</th>
+                                            <th>Flat Type</th>
+                                            <th>Guest Name</th>
+                                            <th>Paid Amount</th>
+                                            <th>Total Amount</th>
+                                            <th>Room Status</th>
+                                            <th>Booking Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($propertyrentaldaily as $item)
+                                            <tr>
+                                                <input type="hidden" class="delete_val" value="{{ $item->id }}">
+                                                <td>{{ $item->room->room_no }}</td>
+                                                <td>{{ $item->flattype->name }}</td>
+                                                <td>{{ $item->name }}</td>
+                                                <td>{{ $item->advance }}</td>
+                                                <td>{{ $item->total_amount }}</td>
+                                                <td>{{ $item->start_date }}-{{ $item->end_date }}</td>
+                                                <td>
+
+                                                    @if ($item->status == 1)
+                                                        <span class="badge badge-success">Checked-In</span>
+                                                    @elseif($item->status == 2)
+                                                        <span class="badge badge-info">Checked Out</span>
+                                                    @else
+                                                        <span class="badge badge-danger">Not Checked-In</span>
+                                                    @endif
+                                                </td>
+                                                <td><a href="{{ route('admin.propertyrental.show', $item->id) }}"
+                                                        class="btn  btn-info " title="Show"><i class="fas fa fa-eye"
+                                                            aria-hidden="true"></i></a>
+                                                    <a class="btn btn-success " onclick="checkout({{ $item }});"
+                                                        title="Checkout"><i class="fa fa-rotate-right"></i></a>
+                                                    <a class="btn btn-dark " onclick="frames['frame'].print()"
+                                                        title="Print">
+                                                        <i class="fa fa-print"></i></a>
+                                                    <a href="{{ route('admin.propertyrental.edit', $item->id) }}"
+                                                        class="btn btn-secondary" title="Edit">
+                                                        <i class="fa fa-pencil"></i></a>
+                                                </td>
+                                            </tr>
+                                            <iframe src="{{ route('admin.propertyrental.pdf', $item->id) }}"
+                                                style="display:none;" name="frame"></iframe>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+
                             <!-- /.card-body -->
                         </div>
                         <!-- /.card -->
@@ -159,8 +153,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="">Paid Amount</label>
-                                <input class="form-control" type="text" name="advance" value=""
-                                    id="advance">
+                                <input class="form-control" type="text" name="advance" value="" id="advance">
                             </div>
                         </div>
                     </div>
