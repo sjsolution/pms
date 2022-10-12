@@ -223,7 +223,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Payment Modal</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" onclick="cleanfileds();" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -287,7 +287,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" onclick="cleanfileds();"
+                            data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary" onclick="storecontract();">Save</button>
                     </div>
                 </div>
@@ -375,6 +376,17 @@
             ele('building_id').value = property.building_id;
         }
 
+        const cleanfileds = () => {
+            ele('cash_pay').checked = false;
+            ele('cheque_pay').checked = false;
+            ele('building_id').value = '';
+            ele('property_id').value = '';
+            ele('name').value = '';
+            ele('cheque_detail').value = '';
+            ele('date').value = '';
+            ele('deposit_date').value = '';
+            ele('clearance_date').value = '';
+        }
         const storecontract = () => {
             $.ajaxSetup({
                 headers: {
@@ -400,7 +412,7 @@
                 url: "{{ route('admin.propertyrental.storecontract') }}",
                 data: data,
                 success: function(response) {
-                    if(response){
+                    if (response) {
                         $('#paymentModal').modal('hide');
                         toastr.success(response.mesg);
                         window.setTimeout(function() {
