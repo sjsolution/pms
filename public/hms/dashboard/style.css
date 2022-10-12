@@ -64,8 +64,8 @@
 .box-content{
     display: flex;
     gap: 8px;
-    /* margin-top: 8px; */
-    margin-left: 13px;
+    margin-top: 6px;
+    /* margin-left: 13px; */
 }
 
 .style-box{
