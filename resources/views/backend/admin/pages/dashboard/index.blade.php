@@ -33,29 +33,91 @@
                 <div class="row">
                     <div class="col-lg-4 col-md-4 col-12">
                         <div class="form-group">
-                            <label for="">Select Building (Drop Down)</label><span class="text-danger">*</span>
-                            <select name="building_id" id="building_id" class="form-control select2">
-                                <option value="" selected disabled>--Select Building--</option>
-                                @foreach ($building as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
+                            @if (Auth::user()->hasRole('admin'))
+                                <label for="">Select Building (Drop Down)</label><span class="text-danger">*</span>
+                                <select name="building_id" id="building_id" class="form-control select2">
+                                    <option value="" selected disabled>--Select Building--</option>
+                                    @foreach ($building as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                            @else
+                                <label for="">Building Name</label><span class="text-danger">*</span>
+                                <input type="hidden" name="building_id"
+                                    value="{{ isset($building->id) ? $building->id : '' }}" id="">
+                                <input type="text" readonly class="form-control"
+                                    value="{{ isset($building->name) ? $building->name : '' }}">
+                            @endif
                         </div>
                     </div>
 
                 </div>
                 <!-- /.row -->
                 <div class="row">
-                    <div class="col-lg-12 col-md-12 col-12">
-                        <div class="box-content" id="box">
+                    @if (Auth::user()->hasRole('admin'))
+                        <div class="col-lg-12 col-md-12 col-12">
+                            <div class="box-content" id="box">
 
+                            </div>
                         </div>
-                    </div>
+                    @else
+                        <div class="col-lg-12 col-md-12 col-12">
+                            <div class="box-content" id="box1">
+                                @foreach ($room as $item)
+                                    @php
+                                        if ($item->status == 1) {
+                                            $color = 'rgb(126, 205, 90)';
+                                        } else {
+                                            $color = 'red';
+                                        }
+                                    @endphp
+                                    <div class="style-box" style="background-color:{{ $color }}">
+                                        <p class="">{{ $item->flattype->name }}<br>{{ $item->room_no }}</p>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
                 </div>
                 <br>
-                <div class="row" id="cards">
+                @if (Auth::user()->hasRole('admin'))
+                    <div class="row" id="cards">
 
-                </div>
+                    </div>
+                @else
+                    <div class="row" id="cards1">
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box" style="background-color: #7ECD5A;">
+                                <div class="inner">
+                                    <h3>{{ $vacantcount }}</h3>
+
+                                    <p>Vacant</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-bed"></i>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box" style="background-color: red;">
+                                <div class="inner">
+                                    <h3>{{ $occupiedcount }}</h3>
+
+                                    <p>Occupied</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-bed"></i>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
 
             </div><!-- /.container-fluid -->
         </section>

@@ -100,7 +100,7 @@
                                                         title="Print">
                                                         <i class="fa fa-print"></i></a>
                                                     <a href="{{ route('admin.propertyrental.edit', $item->id) }}"
-                                                        class="btn btn-secondary" title="Edit">
+                                                        class="btn btn-secondary" title="Extand">
                                                         <i class="fa fa-pencil"></i></a>
                                                 </td>
                                             </tr>

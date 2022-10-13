@@ -112,8 +112,8 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="total_days">Total Days</label><span class="text-danger">*</span>
-                                                <input type="text" readonly name="total_days" value="" class="form-control"
-                                                    id="total_days" placeholder="Total Days">
+                                                <input type="text" readonly name="total_days" value=""
+                                                    class="form-control" id="total_days" placeholder="Total Days">
                                                 @if ($errors->any())
                                                     <p class="text-danger">{{ $errors->first('total_days') }}</p>
                                                 @endif
@@ -138,8 +138,9 @@
                                             <div class="form-group">
                                                 <label for="total_amount">Total Amount</label><span
                                                     class="text-danger">*</span>
-                                                <input type="text" readonly required name="total_amount" value=""
-                                                    class="form-control" id="total_amount" placeholder="Total Amount">
+                                                <input type="text" readonly required name="total_amount"
+                                                    value="" class="form-control" id="total_amount"
+                                                    placeholder="Total Amount">
                                                 @if ($errors->any())
                                                     <p class="text-danger">{{ $errors->first('total_amount') }}</p>
                                                 @endif
@@ -185,7 +186,7 @@
                     {{-- Guest Detial card --}}
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="card card-primary" id="guest_detail" style="display: none;">
+                            <div class="card card-primary" id="guest_detail">
                                 <div class="card-header">
                                     <h3 class="card-title">Guest Detail</h3>
                                 </div>
@@ -216,11 +217,19 @@
                                     </div>
 
                                     <div class="row">
+
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="">Mobile No</label><span class="text-danger">*</span>
-                                                <input type="text" required name="mobile_no" value=""
-                                                    class="form-control" id="mobile_no" placeholder="Mobile No">
+                                                <label for="">Document Type</label><span
+                                                    class="text-danger">*</span>
+                                                <select name="document_type" required class="form-control select2"
+                                                    id="">
+                                                    <option value="" selected disabled>--Select Document Type--
+                                                    </option>
+                                                    <option value="passport">Passport</option>
+                                                    <option value="id">ID</option>
+                                                    <option value="d/l">D/L</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -244,6 +253,13 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
+                                                <label for="">Mobile No</label><span class="text-danger">*</span>
+                                                <input type="text" required name="mobile_no" value=""
+                                                    class="form-control" id="mobile_no" placeholder="Mobile No">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
                                                 <label for="">Nationality</label><span
                                                     class="text-danger">*</span>
                                                 <input type="text" required name="nationality" value=""
@@ -258,33 +274,24 @@
                                                     class="form-control" id="company_name" placeholder="Company Name">
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="">Date Of Birth</label>
-                                                <input type="date" name="dob" value=""
-                                                    class="form-control" id="dob" placeholder="Date Of Birth">
-                                            </div>
-                                        </div>
+
                                     </div>
 
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="">Document Type</label><span
-                                                    class="text-danger">*</span>
-                                                <select name="document_type" required class="form-control select2" id="">
-                                                    <option value="" selected disabled>--Select Document Type--
-                                                    </option>
-                                                    <option value="passport">Passport</option>
-                                                    <option value="id">ID</option>
-                                                    <option value="d/l">D/L</option>
-                                                </select>
+                                                <label for="">Date Of Birth</label>
+                                                <input type="date" name="dob" value="" class="form-control"
+                                                    id="dob" placeholder="Date Of Birth">
                                             </div>
                                         </div>
+
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="">Payment Type</label>
-                                                <select name="payment_type" class="form-control select2" id="">
+                                                <label for="">Payment Type</label><span
+                                                    class="text-danger">*</span>
+                                                <select name="payment_type" required class="form-control select2"
+                                                    id="">
                                                     <option value="" selected disabled>--Select Payment Type--
                                                     </option>
                                                     <option value="cash">Cash</option>
@@ -301,7 +308,7 @@
                                                 <select name="board_type" class="form-control select2" id="">
                                                     <option value="" selected disabled>--Select Board Type--</option>
                                                     <option value="half">Half</option>
-                                                    <option value="full">Full</option>
+                                                    <option value="full" selected>Full</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -311,14 +318,14 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="">Place Of Birth</label>
-                                                <input type="text"  name="place_birth" value=""
+                                                <input type="text" name="place_birth" value=""
                                                     class="form-control" id="place_birth" placeholder="Place Of Birth">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="">First Child DOB</label>
-                                                <input type="date"  name="first_child_dob" value=""
+                                                <input type="date" name="first_child_dob" value=""
                                                     class="form-control" id="first_child_dob"
                                                     placeholder="First Child DOB">
                                             </div>
@@ -326,7 +333,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="">Second Child DOB</label>
-                                                <input type="date"  name="sec_chhild_dob" value=""
+                                                <input type="date" name="sec_chhild_dob" value=""
                                                     class="form-control" id="sec_chhild_dob"
                                                     placeholder="Second Child DOB">
                                             </div>
@@ -337,21 +344,21 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="">Infants</label>
-                                                <input type="text"  name="infants" value=""
-                                                    class="form-control" id="infants" placeholder="Infants">
+                                                <input type="text" name="infants" value="" class="form-control"
+                                                    id="infants" placeholder="Infants">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="">Email ID</label>
-                                                <input type="email"  name="email" value=""
-                                                    class="form-control" id="email" placeholder="Email ID">
+                                                <input type="email" name="email" value="" class="form-control"
+                                                    id="email" placeholder="Email ID">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="">Place Of Issue</label>
-                                                <input type="text"  name="place_issue" value=""
+                                                <input type="text" name="place_issue" value=""
                                                     class="form-control" id="place_issue" placeholder="Place OF Issue">
                                             </div>
                                         </div>
@@ -389,10 +396,10 @@
     <script type="text/javascript">
         $(function() {
             var d = new Date();
-                d.setDate(d.getDate() - 1);
-                d = new Date(d);
+            d.setDate(d.getDate() - 1);
+            d = new Date(d);
             $('#start_date').daterangepicker({
-              
+
                 autoUpdateInput: false,
                 minDate: d,
                 locale: {

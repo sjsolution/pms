@@ -10,4 +10,5 @@ class Checkout extends Model
     use HasFactory;
 
     protected $fillable = ['building_id', 'propertyrental_id', 'total_amount', 'advance', 'remaining', 'additional_charges', 'payment_type'];
+
 }
