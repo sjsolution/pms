@@ -15,8 +15,10 @@ class CreateCheckoutsTable extends Migration
     {
         Schema::create('checkouts', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('building_id')->nullable();
+            $table->foreign('building_id')->references('id')->on('buildings')->onDelete('cascade');
             $table->unsignedBigInteger('propertyrental_id')->nullable();
-            $table->foreign('propertyrental_id')->references('id')->on('property_rental_dailies')->onDelete('cascade');
+            $table->foreign('propertyrental_id')->references('id')->on('property_rentals')->onDelete('cascade');
             $table->string('total_amount')->nullable();
             $table->string('advance')->nullable();
             $table->string('remaining')->nullable();

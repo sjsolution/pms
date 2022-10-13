@@ -64,7 +64,7 @@ class AdminValidations
             $request->all(),
             [
                 'name' => 'required',
-                'email'=> 'required',
+                'email' => 'required',
                 'property_id' => 'required',
                 'role' => 'required',
             ],
@@ -73,6 +73,22 @@ class AdminValidations
                 'email.required' => 'Email is required',
                 'property_id.required' => 'Select Building',
                 'role.required' => 'Select Role',
+            ]
+        );
+        if ($validator->fails()) {
+            return $validator;
+        }
+    }
+
+    public static function buildingregister($request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => 'required',
+            ],
+            [
+                'name.required' => 'Building Name is required'
             ]
         );
         if ($validator->fails()) {

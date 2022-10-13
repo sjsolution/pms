@@ -1,5 +1,5 @@
 @extends('backend.admin.layouts.master')
-@section('title', 'Property List')
+@section('title', 'Flat List')
 @section('style')
     <style>
         .switch {
@@ -234,13 +234,21 @@
                                     delete_id),
                                 data: data,
                                 success: function(response) {
-                                    swal(response.status, {
-                                            icon: "success",
-                                        })
-                                        .then((result) => {
-                                            location.reload();
-                                        });
-
+                                    if (response.status) {
+                                        swal(response.status, {
+                                                icon: "success",
+                                            })
+                                            .then((result) => {
+                                                location.reload();
+                                            });
+                                    } else {
+                                        swal(response.error, {
+                                                icon: "error",
+                                            })
+                                            .then((result) => {
+                                                location.reload();
+                                            });
+                                    }
                                 }
 
                             });

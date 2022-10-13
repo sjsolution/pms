@@ -94,6 +94,11 @@
         .slider.round:before {
             border-radius: 50%;
         }
+
+        .toast-message {
+            font-size: 14px;
+            color: white;
+        }
     </style>
 @endsection
 @section('content')
@@ -104,12 +109,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Mediciens List</h1>
+                        <h1>Property Rentals</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item active">Properties</li>
+                            <li class="breadcrumb-item active">Property Rental</li>
                         </ol>
                     </div>
                 </div>
@@ -124,62 +129,78 @@
                         <div class="card">
                             @if (Session::has('msg'))
                                 <div class="col-md-12">
-                                    <div class="alert alert-success" style="margin-top: 5px">{{ Session::get('msg') }}</div>
+                                    <div class="alert alert-success msg" style="margin-top: 5px">{{ Session::get('msg') }}
+                                    </div>
                                 </div>
                             @endif
-                            <form action="{{ route('admin.property.bulk-action') }}" method="post" id="target">
-                                @csrf
-                                <div class="card-header">
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <a href="{{ route('admin.property.create') }}" class="btn btn-primary"
-                                                style="float: left">ADD+</a>
-                                        </div>
-                                        @if (isset($property) && $property->count() > 0)
-                                            <input type="hidden" id="changeStatus" name="status" value="">
-                                            <div class="col-md-4 text-right">
-                                                <a class="btn btn-danger" onclick="addStatus('delete')"
-                                                    style="margin-left: 18px;">Delete</a>
-                                            </div>
+
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <a href="{{ route('admin.propertyrental.create') }}" class="btn btn-primary"
+                                            style="float: left">ADD+</a>
                                     </div>
-                                    @endif
+
                                 </div>
-                                <!-- /.card-header -->
-                                <div class="card-body">
-                                    <table id="example2" class="table table-bordered table-hover">
-                                        <thead>
+
+                            </div>
+
+                            @foreach ($alerts as $item)
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    <strong>Mr.{{ $item['name'] }}</strong> contract will expire in {{ $item['days'] }}
+                                    days.
+                                    <a data-toggle="modal" onclick="modalclear({{ json_encode($item, true) }});"
+                                        data-target="#paymentModal" class="btn btn-success">Paid</a>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            @endforeach
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Building Name</th>
+                                            <th>Flat Type</th>
+                                            <th>Flat no</th>
+                                            <th>Name</th>
+                                            <th>Rent Date</th>
+                                            <th>Contract Start</th>
+                                            <th>Contract Expires</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($propertyrental as $row)
                                             <tr>
-                                                <th>Building Name</th>
-                                                <th>Flat Type</th>
-                                                <th>Flat no</th>
-                                                <th>Name</th>
-                                                <th>Rent Date</th>
-                                                <th>Contract Start</th>
-                                                <th>Contract Expires</th>
-                                                <th>Actions</th>
+                                                <input type="hidden" class="delete_val" value="{{ $row->id }}">
+                                                <td>{{ $row->building->name }}</td>
+                                                <td>{{ $row->flattype->name }}</td>
+                                                <td>{{ $row->room->room_no }}</td>
+                                                <td>{{ $row->tenant_name }}</td>
+                                                <td>{{ $row->rent_due_date }}</td>
+                                                <td>{{ $row->contract_start }}</td>
+                                                <td>{{ $row->contract_expire }}</td>
+                                                @if ($row->status == 1)
+                                                    <td><span class="badge badge-success">Ongoing</span></td>
+                                                @else
+                                                    <td><span class="badge badge-danger">Expired</span></td>
+                                                @endif
+                                                <td>
+                                                    <a class="btn btn-danger" title="Terminate" style="padding: 2px 10px;"
+                                                        onclick="terminate({{ $row }});"><i
+                                                            class="fa fa-xmark"></i></a>
+                                                    <a href="{{ route('admin.propertyrental.edit', $row->id) }}"
+                                                        class="btn btn-info" title="Edit" style="padding: 2px 8px;"><i
+                                                            class="fa fa-pencil"></i></a>
+                                                </td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($propertyrental as $row)
-                                                <tr>
-                                                    <input type="hidden" class="delete_val" value="{{ $row->id }}">
-                                                    <td>{{ $row->building->name }}</td>
-                                                    <td>{{ $row->flattype->name }}</td>
-                                                    <td>{{ $row->room->room_no }}</td>
-                                                    <td>{{ $row->tenant_name }}</td>
-                                                    <td>{{ $row->rent_due_date }}</td>
-                                                    <td>{{ $row->contract_start }}</td>
-                                                    <td>{{ $row->contract_expire }}</td>
-                                                    <td>
-                                                        <a href="#" class="btn btn-danger dltbtn"><i
-                                                                class="fas fa-trash"></i></a>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </form>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                             <!-- /.card-body -->
                         </div>
                         <!-- /.card -->
@@ -194,6 +215,86 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Payment Modal</h5>
+                    <button type="button" onclick="cleanfileds();" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="hidden" name="name" value="" id="name">
+                                <input type="hidden" name="property_id" value="" id="property_id">
+                                <input type="hidden" name="building_id" value="" id="building_id">
+                                <input type="date" class="form-control" name="date" id="date">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="">Mode of Payment</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="checkbox" class="checkboxval" value="0" onclick="paymentmode('cash');"
+                                    name="mode_payment" id="cash_pay">
+                                <label for="">Cash</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="checkbox" class="checkboxval" value="1"
+                                    onclick="paymentmode('cheque');" name="mode_payment" id="cheque_pay">
+                                <label for="">Cheque</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="check_detail" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="">Cheque Details</label>
+                                    <input type="text" class="form-control" name="cheque_detail" id="cheque_detail">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Deposit Date</label>
+                                    <input type="date" class="form-control" name="deposit_date" id="deposit_date">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Clearance Date</label>
+                                    <input type="date" class="form-control" name="clearance_date"
+                                        id="clearance_date">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="cleanfileds();"
+                            data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="storecontract();">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('scripts')
     <script>
@@ -212,61 +313,115 @@
             return url.replace('item_id', id);
         }
         window.setTimeout(function() {
-            $(".alert").fadeTo(500, 0).slideUp(500, function() {
+            $(".msg").fadeTo(500, 0).slideUp(500, function() {
                 $(this).remove();
             });
         }, 2000);
-        $(document).ready(function() {
 
+        const terminate = (item) => {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var data = {
+                "_token": "{{ csrf_token() }}",
+                "id": item.id,
+                "room_id": item.room_id,
+            };
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('admin.propertyrental.terminate') }}",
+                data: data,
+                success: function(response) {
+                    if (response) {
+                        toastr.success(response.mesg);
+                        window.setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    }
+                }
+            });
+        }
+
+        const paymentmode = (checkbox) => {
+            var cash = ele('cash_pay');
+            var cheque = ele('cheque_pay');
+            var cheque_detail = ele('check_detail');
+            if (checkbox == 'cash') {
+                cash.checked = true;
+                cheque.checked = false;
+                cheque_detail.style.display = "none";
+            } else {
+                cash.checked = false;
+                cheque.checked = true;
+                cheque_detail.style.display = "block";
+            }
+        }
+
+        const modalclear = (item) => {
+            ele('cash_pay').checked = false;
+            ele('cheque_pay').checked = false;
+            ele('building_id').value = '';
+            ele('property_id').value = '';
+            ele('name').value = '';
+            ele('cheque_detail').value = '';
+            ele('date').value = '';
+            ele('deposit_date').value = '';
+            ele('clearance_date').value = '';
+
+            var property = item.property;
+            ele('name').value = property.tenant_name;
+            ele('property_id').value = property.id;
+            ele('building_id').value = property.building_id;
+        }
+
+        const cleanfileds = () => {
+            ele('cash_pay').checked = false;
+            ele('cheque_pay').checked = false;
+            ele('building_id').value = '';
+            ele('property_id').value = '';
+            ele('name').value = '';
+            ele('cheque_detail').value = '';
+            ele('date').value = '';
+            ele('deposit_date').value = '';
+            ele('clearance_date').value = '';
+        }
+        const storecontract = () => {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
 
-            $('.dltbtn').click(function(e) {
-                e.preventDefault();
-                var delete_id = $(this).closest("tr").find('.delete_val').val();
-                swal({
-                        title: "Are you sure?",
-                        text: "Once deleted, you will not be able to recover this data!",
-                        icon: "warning",
-                        buttons: true,
-                        dangerMode: true,
-                    })
-                    .then((willDelete) => {
-                        if (willDelete) {
+            var checkedValue = $('.checkboxval:checked').val();
 
-                            var data = {
-                                "_token": "{{ csrf_token() }}",
-                                "id": delete_id,
-                            };
-
-                            $.ajax({
-                                type: "DELETE",
-                                url: get_url(
-                                    "{{ route('admin.propertyrental.destroy', 'item_id') }}",
-                                    delete_id),
-                                data: data,
-                                success: function(response) {
-                                    swal(response.status, {
-                                            icon: "success",
-                                        })
-                                        .then((result) => {
-                                            location.reload();
-                                        });
-
-                                }
-
-                            });
-
-
-                        }
-                    });
-
-
+            var data = {
+                "_token": "{{ csrf_token() }}",
+                "name": ele('name').value,
+                "building_id": ele('building_id').value,
+                "property_id": ele('property_id').value,
+                "cheque_detail": ele('cheque_detail').value,
+                "date": ele('date').value,
+                "deposit_date": ele('deposit_date').value,
+                "clearance_date": ele('clearance_date').value,
+                "payment_mode": checkedValue,
+            };
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('admin.propertyrental.storecontract') }}",
+                data: data,
+                success: function(response) {
+                    if (response) {
+                        $('#paymentModal').modal('hide');
+                        toastr.success(response.mesg);
+                        window.setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    }
+                }
             });
-        });
 
+        }
     </script>
 @endsection

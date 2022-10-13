@@ -34,9 +34,17 @@ Route::get('/', function () {
 Auth::routes();
 Route::prefix('admin')->middleware(['auth', 'admin'])->namespace('Backend\Admin')->name('admin.')->group(function () {
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+    Route::post('/dashboard/show-room', 'DashboardController@getroom')->name('dashboard.getroom');
 
     //Property Registration
     Route::resource('property', 'PropertyController');
+
+    //Building Routes
+    Route::get('buildings', 'BuildingController@index')->name('building.index');
+    Route::get('building/create', 'BuildingController@create')->name('building.create');
+    Route::post('building/store', 'BuildingController@store')->name('building.store');
+    Route::get('building/{id}/edit', 'BuildingController@edit')->name('building.edit');
+    Route::delete('building/{id}/delete', 'BuildingController@destroy')->name('building.destroy');
     //property additional Route
     Route::prefix('property')->group(function () {
         Route::post('/bulk-action', 'PropertyController@bulkAction')->name('property.bulk-action');
@@ -50,12 +58,16 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->namespace('Backend\Admin'
     //Property Rental Monthly routes
     Route::resource('propertyrental', 'PropertyRentalController');
     Route::get('propertyrental/{id}/getroom', 'PropertyRentalController@getroom')->name('propertyrental.getroom');
+    Route::post('propertyrental/change-bookingstatus', 'PropertyRentalController@changestatus')->name('propertyrental.changestatus');
+    Route::get('propertyrental/{id}/pdf', 'PropertyRentalController@pdf')->name('propertyrental.pdf');
+    Route::post('propertyrentail/checkout', 'PropertyRentalController@checkout')->name('propertyrental.checkout');
+
+    Route::post('propertyrental-terminate', 'PropertyRentalController@terminate')->name('propertyrental.terminate');
+    Route::post('store/contract-payment', 'PropertyRentalController@storecontractpayment')->name('propertyrental.storecontract');
 
     //Property Rental Daily basis routes
     Route::resource('propertyrentaldaily', 'PropertyRentalDailyController');
-    Route::post('propertyrentaldaily/change-bookingstatus', 'PropertyRentalDailyController@changestatus')->name('propertyrentaldaily.changestatus');
-    Route::get('propertyrentaldaily/{id}/pdf', 'PropertyRentalDailyController@pdf')->name('propertyrentaldaily.pdf');
-    Route::post('propertyrentaildaily/checkout', 'PropertyRentalDailyController@checkout')->name('propertyrentaldaily.checkout');
+
 
 
     //Roles And Permission Routes
@@ -75,4 +87,13 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->namespace('Backend\Admin'
 
     Route::get('property-status', 'ReportController@propertystatus')->name('report.prostatus');
     Route::post('get-property-status', 'ReportController@getpropertystatus')->name('report.getpropertystatus');
+
+    Route::get('property-wise-report', 'ReportController@propertywise')->name('report.propertywise');
+    Route::post('get-property-wise-report', 'ReportController@getpropertywise')->name('report.getpropertywise');
+
+    Route::get('property-receiveabel-status', 'ReportController@receiveable_status')->name('report.receiveable_status');
+    Route::post('get-property-receiveabel-status', 'ReportController@getreceiveable_status')->name('report.getreceiveable_status');
+
+    Route::get('payment-report-properties', 'ReportController@paymentproperty')->name('report.paymentproperty');
+    Route::post('get-payment-report-properties', 'ReportController@getpaymentproperty')->name('report.getpaymentproperty');
 });

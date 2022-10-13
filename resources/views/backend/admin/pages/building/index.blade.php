@@ -1,30 +1,7 @@
 @extends('backend.admin.layouts.master')
-@section('title', 'Document List')
+@section('title', 'Building List')
+
 @section('content')
-    <script>
-
-        function loadData2(document) {
-            console.log(document);
-            var document = JSON.parse(document);
-            //calculate days
-            var date1 = new Date();
-            var date2 = new Date(document.expiry_date);
-            var Difference_In_Time = date2.getTime() - date1.getTime();
-
-            //To calculate the no. of days between two dates
-            var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-
-            if (Difference_In_Days <= document.days_alert) {
-                $('#expiremodal').modal('show');
-
-                var text = `Your Document with title ${document.title} will expire after ${document.days_alert} days.`;
-
-                ele('modaltext').innerText = text;
-
-            }
-
-        }
-    </script>
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -32,12 +9,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Documents</h1>
+                        <h1>Buildings</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item active">Documents</li>
+                            <li class="breadcrumb-item active">Buildings</li>
                         </ol>
                     </div>
                 </div>
@@ -58,7 +35,7 @@
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <a href="{{ route('admin.document.create') }}" class="btn btn-primary"
+                                        <a href="{{ route('admin.building.create') }}" class="btn btn-primary"
                                             style="float: left">ADD+</a>
                                     </div>
 
@@ -70,31 +47,24 @@
                                 <table id="example2" class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Title</th>
-                                            <th>Expiry Date</th>
-                                            <th>Image</th>
+                                            <th>ID</th>
+                                            <th>Name</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($document as $row)
+                                        @foreach ($buildings as $row)
                                             <tr>
                                                 <input type="hidden" class="delete_val" value="{{ $row->id }}">
-                                                <td>{{ $row->title }}</td>
-                                                <td>{{ $row->expiry_date }}</td>
-                                                <td><a class="btn btn-info"
-                                                        href="{{ URL::asset('public/documents/' . $row->image) }}"
-                                                        target="_blank"><i class="fas fa fa-eye" aria-hidden="true"></i></a>
-                                                </td>
-                                                <td><a href="{{ route('admin.document.edit', $row->id) }}"
+                                                <td>{{ $row->id }}</td>
+                                                <td>{{ $row->name }}</td>
+                                                <td><a href="{{ route('admin.building.edit', $row->id) }}"
                                                         class="btn btn-primary"><i class="fas fa-pencil-alt"
                                                             aria-hidden="true"></i></a>
                                                     <a href="#" class="btn btn-danger dltbtn"><i
                                                             class="fas fa-trash"></i></a>
                                                 </td>
                                             </tr>
-                                            <iframe style="display: none" onload="loadData2(`{{ $row }}`)"
-                                                frameborder="0"></iframe>
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -114,27 +84,6 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-
-    <!-- Modal -->
-    <div class="modal fade" id="expiremodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Document Alert</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div id="modaltext"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 @section('scripts')
     <script>
@@ -186,16 +135,25 @@
                             $.ajax({
                                 type: "DELETE",
                                 url: get_url(
-                                    "{{ route('admin.document.destroy', 'item_id') }}",
+                                    "{{ route('admin.building.destroy', 'item_id') }}",
                                     delete_id),
                                 data: data,
                                 success: function(response) {
-                                    swal(response.status, {
-                                            icon: "success",
-                                        })
-                                        .then((result) => {
-                                            location.reload();
-                                        });
+                                    if (response.status) {
+                                        swal(response.status, {
+                                                icon: "success",
+                                            })
+                                            .then((result) => {
+                                                location.reload();
+                                            });
+                                    } else {
+                                        swal(response.error, {
+                                                icon: "error",
+                                            })
+                                            .then((result) => {
+                                                location.reload();
+                                            });
+                                    }
 
                                 }
 
@@ -208,7 +166,5 @@
 
             });
         });
-
-        //expire alert script
     </script>
 @endsection
