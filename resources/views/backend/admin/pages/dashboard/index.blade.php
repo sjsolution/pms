@@ -33,7 +33,7 @@
                 <div class="row">
                     <div class="col-lg-4 col-md-4 col-12">
                         <div class="form-group">
-                            <label for="">Select Buildind (Drop Down)</label><span class="text-danger">*</span>
+                            <label for="">Select Building (Drop Down)</label><span class="text-danger">*</span>
                             <select name="building_id" id="building_id" class="form-control select2">
                                 <option value="" selected disabled>--Select Building--</option>
                                 @foreach ($building as $item)

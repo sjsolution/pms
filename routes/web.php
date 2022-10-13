@@ -38,6 +38,13 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->namespace('Backend\Admin'
 
     //Property Registration
     Route::resource('property', 'PropertyController');
+
+    //Building Routes
+    Route::get('buildings', 'BuildingController@index')->name('building.index');
+    Route::get('building/create', 'BuildingController@create')->name('building.create');
+    Route::post('building/store', 'BuildingController@store')->name('building.store');
+    Route::get('building/{id}/edit', 'BuildingController@edit')->name('building.edit');
+    Route::delete('building/{id}/delete', 'BuildingController@destroy')->name('building.destroy');
     //property additional Route
     Route::prefix('property')->group(function () {
         Route::post('/bulk-action', 'PropertyController@bulkAction')->name('property.bulk-action');
@@ -55,7 +62,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->namespace('Backend\Admin'
     Route::get('propertyrental/{id}/pdf', 'PropertyRentalController@pdf')->name('propertyrental.pdf');
     Route::post('propertyrentail/checkout', 'PropertyRentalController@checkout')->name('propertyrental.checkout');
 
-    Route::post('propertyrental-terminate','PropertyRentalController@terminate')->name('propertyrental.terminate');
+    Route::post('propertyrental-terminate', 'PropertyRentalController@terminate')->name('propertyrental.terminate');
     Route::post('store/contract-payment', 'PropertyRentalController@storecontractpayment')->name('propertyrental.storecontract');
 
     //Property Rental Daily basis routes

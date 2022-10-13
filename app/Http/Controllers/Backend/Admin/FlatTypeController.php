@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\FlatType;
 use Illuminate\Http\Request;
 use App\Validations\AdminValidations;
+
 class FlatTypeController extends Controller
 {
     /**
@@ -112,11 +113,8 @@ class FlatTypeController extends Controller
         if ($flat && $flat->flat()->count() < 1) {
             $flat->delete();
             return response()->json(['status' => 'Record Deleted Successfully']);
+        } else {
+            return response()->json(['error' => 'Record already used it cant be deleted']);
         }
-        else{
-            return response()->json(['status' => 'Record already used it cant be deleted']);
-        }
-
-       
     }
 }

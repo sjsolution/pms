@@ -161,7 +161,7 @@
                             if(payable == total_amount){
                                 var receiveable = '0';
                             }else{
-                                var receiveable = total_amount - advance;
+                                var receiveable = total_amount - payable;
                             }
                             if (status == 1) {
                                 var status =`<span class="badge badge-success">Checked-In </span>`;

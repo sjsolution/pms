@@ -1,7 +1,7 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
-      <a href="{{route('admin.dashboard')}}" class="brand-link">
+      <a href="{{ route('admin.dashboard') }}" class="brand-link">
           <img src="{{ asset('public/hms/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
               class="brand-image img-circle elevation-3" style="opacity: .8">
           <span class="brand-text font-weight-light">Real Estate</span>
@@ -65,7 +65,31 @@
                               </li>
                           </ul>
                       </li>
+                      <li class="nav-item">
+                          <a href="#" class="nav-link">
+                              <i class="nav-icon far fa-building"></i>
+                              <p>
+                                  Buildings
+                                  <i class="fas fa-angle-left right"></i>
+                                  <span class="badge badge-info right"></span>
+                              </p>
+                          </a>
+                          <ul class="nav nav-treeview">
 
+                              <li class="nav-item">
+                                  <a href="{{ route('admin.building.create') }}" class="nav-link">
+                                      <i class="far fa-circle nav-icon"></i>
+                                      <p>Create</p>
+                                  </a>
+                              </li>
+                              <li class="nav-item">
+                                  <a href="{{ route('admin.building.index') }}" class="nav-link">
+                                      <i class="far fa-circle nav-icon"></i>
+                                      <p>List</p>
+                                  </a>
+                              </li>
+                          </ul>
+                      </li>
                       <li class="nav-item">
                           <a href="#" class="nav-link">
                               <i class="nav-icon far fa-building"></i>
