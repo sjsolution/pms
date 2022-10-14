@@ -23,7 +23,7 @@ class PropertyRentalDailyController extends Controller
      */
     public function index()
     {
-        $propertyrentaldaily = PropertyRental::where('property_rental',1)->orderBy('id', 'desc')->get();
+        $propertyrentaldaily = PropertyRental::where(['property_rental'=>1, 'deleted_at'=> null])->orderBy('id', 'desc')->get();
         if ($propertyrentaldaily) {
             return view('backend.admin.pages.propertyrentaldaily.index', compact('propertyrentaldaily'));
         }

@@ -194,10 +194,18 @@
                                                     class="text-danger">*</span>
                                                 <select name="rent_type" id="" class="form-control select2">
                                                     <option value="" selected disabled>--Select RentType--</option>
-                                                    <option value="monthly" @if (isset($propertyrental->id)){{ $propertyrental->rent_type == 'monthly' ? 'selected' : '' }}@endif>Monthly</option>
-                                                    <option value="quarterly" @if (isset($propertyrental->id)){{ $propertyrental->rent_type == 'quarterly' ? 'selected' : '' }}@endif>Quarterly</option>
-                                                    <option value="biyearly" @if (isset($propertyrental->id)){{ $propertyrental->rent_type == 'biyearly' ? 'selected' : '' }} @endif>Biyearly</option>
-                                                    <option value="yearly" @if (isset($propertyrental->id)){{ $propertyrental->rent_type == 'yearly' ? 'selected' : '' }}@endif>Yearly</option>
+                                                    <option value="monthly"
+                                                        @if (isset($propertyrental->id)) {{ $propertyrental->rent_type == 'monthly' ? 'selected' : '' }} @endif>
+                                                        Monthly</option>
+                                                    <option value="quarterly"
+                                                        @if (isset($propertyrental->id)) {{ $propertyrental->rent_type == 'quarterly' ? 'selected' : '' }} @endif>
+                                                        Quarterly</option>
+                                                    <option value="biyearly"
+                                                        @if (isset($propertyrental->id)) {{ $propertyrental->rent_type == 'biyearly' ? 'selected' : '' }} @endif>
+                                                        Biyearly</option>
+                                                    <option value="yearly"
+                                                        @if (isset($propertyrental->id)) {{ $propertyrental->rent_type == 'yearly' ? 'selected' : '' }} @endif>
+                                                        Yearly</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -217,6 +225,33 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
+                                                <label for="tenant_pay_amount">Rent Paying Amount</label><span class="text-danger">*</span>
+                                                <input type="text" required name="tenant_pay_amount"
+                                                    value="{{ isset($propertyrental->tenant_pay_amount) ? $propertyrental->tenant_pay_amount : '' }}"
+                                                    class="form-control" id="tenant_pay_amount" placeholder="Rent">
+                                                @if ($errors->any())
+                                                    <p class="text-danger">{{ $errors->first('tenant_pay_amount') }}
+                                                    </p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="tenant_remaining_amount">Rent Remaining Amount</label>
+                                                <input type="text" name="tenant_remaining_amount"
+                                                    value="{{ isset($propertyrental->tenant_remaining_amount) ? $propertyrental->tenant_remaining_amount : '' }}"
+                                                    class="form-control" id="tenant_remaining_amount" placeholder="Rent">
+                                                @if ($errors->any())
+                                                    <p class="text-danger">{{ $errors->first('tenant_remaining_amount') }}
+                                                    </p>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
                                                 <label for="rent_due_date">Rent Due Date</label><span
                                                     class="text-danger">*</span>
                                                 <input type="date" name="rent_due_date"
@@ -227,7 +262,6 @@
                                                 @endif
                                             </div>
                                         </div>
-
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="contract_start">Contract Start</label><span
@@ -241,9 +275,6 @@
                                                 @endif
                                             </div>
                                         </div>
-
-                                    </div>
-                                    <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="contract_expire">Contract Expire</label><span

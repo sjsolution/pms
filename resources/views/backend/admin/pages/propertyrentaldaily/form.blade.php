@@ -186,7 +186,7 @@
                     {{-- Guest Detial card --}}
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="card card-primary" id="guest_detail">
+                            <div class="card card-primary" id="guest_detail" style="display: none;">
                                 <div class="card-header">
                                     <h3 class="card-title">Guest Detail</h3>
                                 </div>

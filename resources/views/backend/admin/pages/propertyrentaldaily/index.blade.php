@@ -102,6 +102,8 @@
                                                     <a href="{{ route('admin.propertyrental.edit', $item->id) }}"
                                                         class="btn btn-secondary" title="Extand">
                                                         <i class="fa fa-pencil"></i></a>
+                                                    <a href="#" class="btn btn-danger dltbtn"><i
+                                                            class="fas fa-trash"></i></a>
                                                 </td>
                                             </tr>
                                             <iframe src="{{ route('admin.propertyrental.pdf', $item->id) }}"
@@ -219,6 +221,9 @@
                 "responsive": true,
             });
         });
+        const get_url = (url, id) => {
+            return url.replace('item_id', id);
+        }
         window.setTimeout(function() {
             $(".alert").fadeTo(500, 0).slideUp(500, function() {
                 $(this).remove();
@@ -276,5 +281,64 @@
                 }
             });
         }
+        $(document).ready(function() {
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $('.dltbtn').click(function(e) {
+                e.preventDefault();
+                var delete_id = $(this).closest("tr").find('.delete_val').val();
+                swal({
+                        title: "Are you sure?",
+                        text: "Once deleted, you will not be able to recover this data!",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                    .then((willDelete) => {
+                        if (willDelete) {
+
+                            var data = {
+                                "_token": "{{ csrf_token() }}",
+                                "id": delete_id,
+                            };
+
+                            $.ajax({
+                                type: "DELETE",
+                                url: get_url(
+                                    "{{ route('admin.propertyrental.destroy', 'item_id') }}",
+                                    delete_id),
+                                data: data,
+                                success: function(response) {
+                                    if (response.status) {
+                                        swal(response.status, {
+                                                icon: "success",
+                                            })
+                                            .then((result) => {
+                                                location.reload();
+                                            });
+                                    } else {
+                                        swal(response.error, {
+                                                icon: "error",
+                                            })
+                                            .then((result) => {
+                                                location.reload();
+                                            });
+                                    }
+                                }
+
+                            });
+
+
+                        }
+                    });
+
+
+            });
+        });
     </script>
 @endsection

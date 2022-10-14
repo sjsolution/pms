@@ -124,6 +124,10 @@
 
                                 var advance = response['property'][i].advance;
                                 var total_amount = response['property'][i].total_amount;
+                                var tenant_pay_amount = response['property'][i]
+                                    .tenant_pay_amount;
+                                var tenant_remaining_amount = response['property'][i]
+                                    .tenant_remaining_amount;
 
                                 if (property_rental == 0) {
                                     var currentdate = new Date();
@@ -131,9 +135,18 @@
                                     var name = response['property'][i].tenant_name;
                                     if (currentdate > expiredate) {
                                         var receiveable = monthly_rent;
+                                        var total = +monthly_rent + +response['property'][i]
+                                            .monthly_rent;
+                                        total += tenant_remaining_amount;
                                         toastr.error(`${name} has remaining amount`);
                                     } else {
-                                        var receiveable = '0';
+                                        if (tenant_remaining_amount != 0) {
+                                            var receiveable = tenant_pay_amount -
+                                                tenant_remaining_amount;
+
+                                        } else {
+                                            var receiveable = '0';
+                                        }
                                     }
                                 } else {
                                     var name = response['property'][i].name;

@@ -24,28 +24,53 @@ class PropertyRentalController extends Controller
      */
     public function index()
     {
-        $propertyrental = PropertyRental::with('building', 'flattype', 'room')->where('property_rental', 0)->orderBy('id', 'desc')->get();
-        $alerts = [];
-        foreach ($propertyrental as $key => $property) {
-            $start_date = $property->contract_expire;
-            $first_date =  strtotime($start_date);
+        try {
+            $propertyrental = PropertyRental::with('building', 'flattype', 'room')->where(['property_rental' => 0, 'deleted_at' => null])->orderBy('id', 'desc')->get();
+            $alerts = [];
+            foreach ($propertyrental as $key => $property) {
+                $start_date = $property->contract_expire;
+                $first_date =  strtotime($start_date);
 
-            $mytime = date("Y-m-d");
-            $second_date = strtotime($mytime);
+                $mytime = date("Y-m-d");
+                $second_date = strtotime($mytime);
 
-            $diff = $first_date - $second_date;
-            $days = round($diff / (60 * 60 * 24));
-            $final_days = (int)$days;
-            $day_alert = 5;
-            if($day_alert >= $final_days){
-                array_push($alerts, [
-                    "name"=>$property->tenant_name,
-                    "days"=>$final_days,
-                    "property"=>$property,
-                ]);
+                $diff = $first_date - $second_date;
+                $days = round($diff / (60 * 60 * 24));
+                $final_days = (int)$days;
+                $day_alert = 5;
+                if ($day_alert >= $final_days) {
+                    array_push($alerts, [
+                        "name" => $property->tenant_name,
+                        "days" => $final_days,
+                        "property" => $property,
+                    ]);
+                }
             }
+            $payment_alert = [];
+            foreach ($propertyrental as $key => $property) {
+                $start_date = $property->contract_expire;
+                $first_date =  strtotime($start_date);
+
+                $mytime = date("Y-m-d");
+                $second_date = strtotime($mytime);
+
+                $diff = $first_date - $second_date;
+                $days = round($diff / (60 * 60 * 24));
+                $final_days = (int)$days;
+                $day_alert = 22;
+                if ($property->tenant_remaining_amount != 0) {
+                    if ($day_alert <= $final_days) {
+                        array_push($payment_alert, [
+                            "name" => $property->tenant_name,
+                            "amount" => $property->tenant_remaining_amount,
+                        ]);
+                    }
+                }
+            }
+            return view('backend.admin.pages.propertyrental.index', compact('propertyrental', 'alerts', 'payment_alert'));
+        } catch (\Illuminate\Database\QueryException $ex) {
+            return $ex->getMessage();
         }
-        return view('backend.admin.pages.propertyrental.index', compact('propertyrental', 'alerts'));
     }
 
     /**
@@ -128,17 +153,21 @@ class PropertyRentalController extends Controller
      */
     public function edit($id)
     {
-        $propertyrental = PropertyRental::find($id);
-        if ($propertyrental->property_rental == 0) {
-            $building = Building::all();
-            $flattype = FlatType::all();
-            $room = Room::all();
-            return view('backend.admin.pages.propertyrental.edit', compact('propertyrental', 'building', 'flattype', 'room'));
-        } else {
-            $building = Building::all();
-            $flattype = FlatType::all();
-            $room = Room::all();
-            return view('backend.admin.pages.propertyrentaldaily.edit', compact('propertyrental', 'building', 'flattype', 'room'));
+        try {
+            $propertyrental = PropertyRental::find($id);
+            if ($propertyrental->property_rental == 0) {
+                $building = Building::all();
+                $flattype = FlatType::all();
+                $room = Room::all();
+                return view('backend.admin.pages.propertyrental.edit', compact('propertyrental', 'building', 'flattype', 'room'));
+            } else {
+                $building = Building::all();
+                $flattype = FlatType::all();
+                $room = Room::all();
+                return view('backend.admin.pages.propertyrentaldaily.edit', compact('propertyrental', 'building', 'flattype', 'room'));
+            }
+        } catch (\Illuminate\Database\QueryException $ex) {
+            return $ex->getMessage();
         }
     }
 
@@ -151,20 +180,24 @@ class PropertyRentalController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $propertyrental = PropertyRental::find($id);
-        if ($propertyrental->property_rental == 1) {
-            $update =  $propertyrental->update($request->all());
+        try {
+            $propertyrental = PropertyRental::find($id);
+            if ($propertyrental->property_rental == 1) {
+                $update =  $propertyrental->update($request->all());
 
-            if ($update) {
-                $request->session()->flash('msg', 'Updated Sucessfully!!');
-                return redirect()->route('admin.propertyrentaldaily.index');
+                if ($update) {
+                    $request->session()->flash('msg', 'Updated Sucessfully!!');
+                    return redirect()->route('admin.propertyrentaldaily.index');
+                }
+            } else {
+                $update =  $propertyrental->update($request->all());
+                if ($update) {
+                    $request->session()->flash('msg', 'Updated Sucessfully!!');
+                    return redirect()->route('admin.propertyrental.index');
+                }
             }
-        } else {
-            $propertyrental->contract_expire = $request->contract_expire;
-            $propertyrental->rent_due_date = $request->contract_expire;
-            $propertyrental->save();
-            $request->session()->flash('msg', 'Updated Sucessfully!!');
-            return redirect()->route('admin.propertyrental.index');
+        } catch (\Illuminate\Database\QueryException $ex) {
+            return $ex->getMessage();
         }
     }
 
@@ -176,7 +209,12 @@ class PropertyRentalController extends Controller
      */
     public function destroy($id)
     {
-        PropertyRental::destroy($id);
+        $property = PropertyRental::find($id);
+        $room_id = $property->room_id;
+        $room = Room::find($room_id);
+        $room->status = !$room->status;
+        $room->save();
+        $property->delete();
         return response()->json(['status' => 'Record Deleted Successfully']);
     }
 
@@ -240,18 +278,19 @@ class PropertyRentalController extends Controller
         }
     }
 
-    public function storecontractpayment(Request $request){
+    public function storecontractpayment(Request $request)
+    {
         $contract_payment = ContractPayment::create($request->all());
         $property_id = $contract_payment->property_id;
         $property = PropertyRental::find($property_id);
-        if($property){
+        if ($property) {
             $time = strtotime($property->contract_expire);
             $final = date("Y-m-d", strtotime("+1 month", $time));
             $property->contract_expire = $final;
             $property->save();
         }
-        if($contract_payment){
-            return response()->json(['mesg'=>'Payment Updated.']);
+        if ($contract_payment) {
+            return response()->json(['mesg' => 'Payment Updated.']);
         }
     }
 }

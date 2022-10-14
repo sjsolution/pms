@@ -32,9 +32,8 @@ class ReportController extends Controller
         $toDate = $date[1];
         $start = Carbon::parse($fromDate)->toDateString();
         $end = Carbon::parse($toDate)->toDateString();
-        $property = PropertyRental::with('room','charges')->where(['building_id' => $building_id, 'property_rental' => 1])
+        $property = PropertyRental::withTrashed()->with('room','charges')->where(['building_id' => $building_id, 'property_rental' => 1])
             ->whereBetween('created_at', [$start, $end])->get();
-        $charges = Checkout::where('building_id', $building_id)->first();
         $daily_total = $property->sum('total_amount');
         $checkout = Checkout::where('building_id', $building_id)->get();
         $additional = $checkout->sum('additional_charges');
@@ -65,7 +64,7 @@ class ReportController extends Controller
     public function getpropertywise(Request $request)
     {
         $building_id = $request->building_id;
-        $property = PropertyRental::with('building', 'flattype', 'room')->where(['building_id' => $building_id, 'property_rental' => 0])->orderBy('id', 'desc')->get();
+        $property = PropertyRental::withTrashed()->with('building', 'flattype', 'room')->where(['building_id' => $building_id, 'property_rental' => 0])->orderBy('id', 'desc')->get();
         return response()->json(['property' => $property, 'mesg' => 'fetched successfully']);
     }
 
@@ -78,7 +77,7 @@ class ReportController extends Controller
     public function getreceiveable_status(Request $request)
     {
         $building_id = $request->building_id;
-        $property = PropertyRental::with('building', 'flattype', 'room')->where(['building_id' => $building_id])->orderBy('id', 'desc')->get();
+        $property = PropertyRental::withTrashed()->with('building', 'flattype', 'room')->where(['building_id' => $building_id])->orderBy('id', 'desc')->get();
         return response()->json(['property' => $property, 'mesg' => 'fetched successfully']);
     }
 
@@ -90,7 +89,7 @@ class ReportController extends Controller
     public function getpaymentproperty(Request $request)
     {
         $building_id = $request->building_id;
-        $property = PropertyRental::with('building', 'flattype', 'room')->where(['building_id' => $building_id, 'property_rental' => 0])->orderBy('id', 'desc')->get();
+        $property = PropertyRental::withTrashed()->with('building', 'flattype', 'room')->where(['building_id' => $building_id, 'property_rental' => 0])->orderBy('id', 'desc')->get();
         return response()->json(['property' => $property, 'mesg' => 'fetched successfully']);
     }
 }
