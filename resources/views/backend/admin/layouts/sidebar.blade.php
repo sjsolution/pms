@@ -236,30 +236,33 @@
                                   <p>Period wise Report</p>
                               </a>
                           </li>
-                          <li class="nav-item">
-                              <a href="{{ route('admin.report.prostatus') }}" class="nav-link">
-                                  <i class="far fa-circle nav-icon"></i>
-                                  <p>Property Status</p>
-                              </a>
-                          </li>
-                          <li class="nav-item">
-                              <a href="{{ route('admin.report.propertywise') }}" class="nav-link">
-                                  <i class="far fa-circle nav-icon"></i>
-                                  <p>Property Wise Report</p>
-                              </a>
-                          </li>
-                          <li class="nav-item">
-                              <a href="{{ route('admin.report.receiveable_status') }}" class="nav-link">
-                                  <i class="far fa-circle nav-icon"></i>
-                                  <p>Receiveable Status</p>
-                              </a>
-                          </li>
-                          <li class="nav-item">
-                              <a href="{{ route('admin.report.paymentproperty') }}" class="nav-link">
-                                  <i class="far fa-circle nav-icon"></i>
-                                  <p>Property Payment</p>
-                              </a>
-                          </li>
+                          @if (Auth::user()->hasRole('admin'))
+                              <li class="nav-item">
+                                  <a href="{{ route('admin.report.prostatus') }}" class="nav-link">
+                                      <i class="far fa-circle nav-icon"></i>
+                                      <p>Property Status</p>
+                                  </a>
+                              </li>
+                              <li class="nav-item">
+                                  <a href="{{ route('admin.report.propertywise') }}" class="nav-link">
+                                      <i class="far fa-circle nav-icon"></i>
+                                      <p>Property Wise Report</p>
+                                  </a>
+                              </li>
+                              <li class="nav-item">
+                                  <a href="{{ route('admin.report.receiveable_status') }}" class="nav-link">
+                                      <i class="far fa-circle nav-icon"></i>
+                                      <p>Receiveable Status</p>
+                                  </a>
+                              </li>
+                              <li class="nav-item">
+                                  <a href="{{ route('admin.report.paymentproperty') }}" class="nav-link">
+                                      <i class="far fa-circle nav-icon"></i>
+                                      <p>Property Payment</p>
+                                  </a>
+                              </li>
+                          @endif
+
                       </ul>
                   </li>
               </ul>

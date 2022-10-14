@@ -104,7 +104,6 @@
                     url: "{{ route('admin.report.getpaymentproperty') }}",
                     data: data,
                     success: function(response) {
-                        console.log(response);
                         ele('tbody').innerHTML = '';
                         var len = 0;
                         if (response.property) {
@@ -121,15 +120,27 @@
                                 var contractexpire = response['property'][i].contract_expire;
                                 var payable = response['property'][i].monthly_rent;
                                 var total = response['property'][i].monthly_rent;
-       
+                                var monthly_rent = response['property'][i].monthly_rent;
+                                var tenant_pay_amount = response['property'][i]
+                                    .tenant_pay_amount;
+                                var tenant_remaining_amount = response['property'][i]
+                                    .tenant_remaining_amount;
                                 var currentdate = new Date();
                                 var expiredate = new Date(contractexpire);
 
                                 if (currentdate > expiredate) {
                                     var receiveable = monthly_rent;
-                                    var total = +monthly_rent + +response['property'][i].monthly_rent;
+                                    var total = +monthly_rent + +response['property'][i]
+                                        .monthly_rent;
+                                    total += tenant_remaining_amount;
                                 } else {
-                                    var receiveable = '0';
+                                    if (tenant_remaining_amount != 0) {
+                                        var receiveable = tenant_pay_amount -
+                                            tenant_remaining_amount;
+
+                                    } else {
+                                        var receiveable = '0';
+                                    }
                                 }
 
                                 var html = `<tr>
@@ -138,7 +149,7 @@
                                     <td>${flattype}</td>
                                     <td>${flatno}</td>
                                     <td>${tenantname}</td>
-                                    <td>${payable}</td>
+                                    <td>${tenant_pay_amount}</td>
                                     <td>${receiveable}</td>
                                     <td>${total}</td>
                                     </tr>

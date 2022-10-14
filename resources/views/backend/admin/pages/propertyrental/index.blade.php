@@ -150,7 +150,17 @@
                                     <strong>Mr.{{ $item['name'] }}</strong> contract will expire in {{ $item['days'] }}
                                     days.
                                     <a data-toggle="modal" onclick="modalclear({{ json_encode($item, true) }});"
-                                        data-target="#paymentModal" class="btn btn-success">Paid</a>
+                                        data-target="#paymentModal" class="btn btn-success">Renew</a>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            @endforeach
+                            @foreach ($payment_alert as $item)
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    <strong>Mr.{{ $item['name'] }}</strong> has some remaining amount of
+                                    {{ $item['amount'] }}.
+
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -195,6 +205,8 @@
                                                     <a href="{{ route('admin.propertyrental.edit', $row->id) }}"
                                                         class="btn btn-info" title="Edit" style="padding: 2px 8px;"><i
                                                             class="fa fa-pencil"></i></a>
+                                                    <a class="btn btn-warning dltbtn" title="Delete" style="padding: 2px 8px;"><i
+                                                            class="fa fa-trash"></i></a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -423,5 +435,65 @@
             });
 
         }
+
+        $(document).ready(function() {
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $('.dltbtn').click(function(e) {
+                e.preventDefault();
+                var delete_id = $(this).closest("tr").find('.delete_val').val();
+                swal({
+                        title: "Are you sure?",
+                        text: "Once deleted, you will not be able to recover this data!",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                    .then((willDelete) => {
+                        if (willDelete) {
+
+                            var data = {
+                                "_token": "{{ csrf_token() }}",
+                                "id": delete_id,
+                            };
+
+                            $.ajax({
+                                type: "DELETE",
+                                url: get_url(
+                                    "{{ route('admin.propertyrental.destroy', 'item_id') }}",
+                                    delete_id),
+                                data: data,
+                                success: function(response) {
+                                    if (response.status) {
+                                        swal(response.status, {
+                                                icon: "success",
+                                            })
+                                            .then((result) => {
+                                                location.reload();
+                                            });
+                                    } else {
+                                        swal(response.error, {
+                                                icon: "error",
+                                            })
+                                            .then((result) => {
+                                                location.reload();
+                                            });
+                                    }
+                                }
+
+                            });
+
+
+                        }
+                    });
+
+
+            });
+        });
     </script>
 @endsection
