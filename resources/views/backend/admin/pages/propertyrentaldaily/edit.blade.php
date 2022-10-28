@@ -160,7 +160,7 @@
                                                     class="text-danger">*</span>
                                                 <input type="text" required name="advance"
                                                     value="{{ isset($propertyrental->advance) ? $propertyrental->advance : '' }}"
-                                                    class="form-control" readonly id="advance"
+                                                    class="form-control"  id="advance"
                                                     placeholder="Advance Payment">
                                                 @if ($errors->any())
                                                     <p class="text-danger">{{ $errors->first('advance') }}</p>

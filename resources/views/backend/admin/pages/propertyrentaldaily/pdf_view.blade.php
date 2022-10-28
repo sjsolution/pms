@@ -154,7 +154,7 @@
                 <p>Amount Paid:</p>
             </div>
             <div class="col-md-2">
-                <p>{{ $propertyrentaldaily->total_amount }} Rs.</p>
+                <p>{{ $propertyrentaldaily->advance }} Rs.</p>
             </div>
         </div>
         <div class="row">

@@ -140,7 +140,7 @@
                 <p>Total Amount:</p>
             </div>
             <div class="col-md-2">
-                <p>{{ $propertyrentaldaily->total_amount }} Rs.</p>
+                <p>{{ $propertyrentaldaily->total_amount }} <span>&#65020;</span></p>
             </div>
         </div>
         <div class="row">
@@ -154,7 +154,7 @@
                 <p>Amount Paid:</p>
             </div>
             <div class="col-md-2">
-                <p>{{ $propertyrentaldaily->total_amount }} Rs.</p>
+                <p>{{ $propertyrentaldaily->advance }} <span>&#65020;</span></p>
             </div>
         </div>
         <div class="row">
@@ -183,7 +183,7 @@
                 @php
                     $remain = $propertyrentaldaily->total_amount - $propertyrentaldaily->advance;
                 @endphp
-                <p>{{ $remain }} Rs.</p>
+                <p>{{ $remain }} <span>&#65020;</span></p>
             </div>
         </div>
         <div class="row">

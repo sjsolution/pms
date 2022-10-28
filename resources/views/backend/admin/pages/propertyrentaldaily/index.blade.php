@@ -102,8 +102,10 @@
                                                     <a href="{{ route('admin.propertyrental.edit', $item->id) }}"
                                                         class="btn btn-secondary" title="Extand">
                                                         <i class="fa fa-pencil"></i></a>
-                                                    <a href="#" class="btn btn-danger dltbtn"><i
+                                                        @if (Auth::user()->hasRole('admin'))
+                                                        <a href="#" class="btn btn-danger dltbtn"><i
                                                             class="fas fa-trash"></i></a>
+                                                        @endif    
                                                 </td>
                                             </tr>
                                             <iframe src="{{ route('admin.propertyrental.pdf', $item->id) }}"
@@ -146,7 +148,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="">Total Amount</label>
-                                <input class="form-control" type="text" name="total_amount" value=""
+                                <input readonly class="form-control" type="text" name="total_amount" value=""
                                     id="total_amount">
                             </div>
                         </div>
@@ -155,7 +157,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="">Paid Amount</label>
-                                <input class="form-control" type="text" name="advance" value="" id="advance">
+                                <input readonly class="form-control" type="text" name="advance" value="" id="advance">
                             </div>
                         </div>
                     </div>
@@ -163,7 +165,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="">Remaining Balance</label>
-                                <input class="form-control" type="text" name="remaining" value=""
+                                <input readonly class="form-control" type="text" name="remaining" value=""
                                     id="remaining">
                             </div>
                         </div>
