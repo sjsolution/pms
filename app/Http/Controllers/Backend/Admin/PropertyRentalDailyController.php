@@ -150,7 +150,7 @@ class PropertyRentalDailyController extends Controller
 
     public function checkout(Request $request)
     {
-        $propertyid = PropertyRentalDaily::find($request->propertyrental_id);
+        $propertyid = PropertyRental::find($request->propertyrental_id);
         if($propertyid){
             $propertyid->status = 2;
             $propertyid->save();
@@ -170,6 +170,21 @@ class PropertyRentalDailyController extends Controller
         $propertyrentaldaily = PropertyRentalDaily::find($id);
 
         return view('backend.admin.pages.propertyrentaldaily.pdf_view', compact('propertyrentaldaily'));
+    }
+
+    public function checkremaining(Request $request){
+        $property = PropertyRental::find($request->id);
+        return response()->json(['property'=>$property]);
+    }
+
+    public function addpayment(Request $request, $id){
+        $building = Building::all();
+        $flattype = FlatType::all();
+        $room = Room::all();
+        $propertyrental  = PropertyRental::find($id);
+        if($propertyrental ){
+            return view('backend.admin.pages.propertyrentaldaily.payment', compact('propertyrental','building','flattype','room'));
+        }
     }
 
 }

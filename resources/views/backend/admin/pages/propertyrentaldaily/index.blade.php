@@ -105,7 +105,8 @@
                                                         @if (Auth::user()->hasRole('admin'))
                                                         <a href="#" class="btn btn-danger dltbtn"><i
                                                             class="fas fa-trash"></i></a>
-                                                        @endif    
+                                                        @endif
+                                                    <a href="{{route('admin.propertyrental.addpayment',$item->id)}}" class="btn btn-primary" title="Add Payment"><i class="fa fa-circle-plus"></i></a>        
                                                 </td>
                                             </tr>
                                             <iframe src="{{ route('admin.propertyrental.pdf', $item->id) }}"
@@ -173,6 +174,15 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label for="">Enter Remaining Balance</label>
+                                <input class="form-control" type="text" name="remain_receive" value=""
+                                    id="remain_receive">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
                                 <label for="">Additional Charges</label>
                                 <input class="form-control" type="text" name="additional_charges" value="0"
                                     id="additional_charges">
@@ -201,8 +211,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onclick="storecheckout()" class="btn btn-primary"><i
-                            class="fa fa-rotate-right"></i> Check
+                    <button type="button" onclick="storecheckout()" disabled class="btn btn-primary checkout"><i
+                            class="fa fa-rotate-right" ></i> Check
                         Out</button>
                 </div>
             </div>
@@ -232,6 +242,7 @@
             });
         }, 2000);
         const checkout = (item) => {
+            ele('remain_receive').value = '';
             ele('total_amount').value = '';
             ele('advance').value = '';
             ele('remaining').value = '';
@@ -245,8 +256,7 @@
             ele('building_id').value = item.building_id;
             var remaining = ele('remaining').value = item.total_amount - item.advance;
             if (remaining != 0) {
-                var html = `Mr. ${item.name} has some dues outstanding. Do you really want to proceed?`;
-                ele('message').innerText = html;
+               
             }
         }
 
@@ -266,6 +276,7 @@
                 "remaining": ele('remaining').value,
                 "additional_charges": ele('additional_charges').value,
                 "payment_type": ele('payment_type').value,
+                "remain_receive" : ele('remain_receive').value,
 
             };
             $.ajax({
@@ -283,6 +294,7 @@
                 }
             });
         }
+
         $(document).ready(function() {
 
             $.ajaxSetup({
@@ -342,5 +354,39 @@
 
             });
         });
+
+        
+        const amount = ele('remain_receive');
+        const existdelay = 2000;
+        let existtimer;
+        amount.addEventListener('input', code => {
+            clearTimeout(existtimer);
+            existtimer = setTimeout(x => {
+                $.ajax({
+                    data: {
+                        amount: amount.value,
+                        id:  ele('propertyrental_id').value,
+                    },
+                    type: "POST",
+                    url: "{{route('admin.propertyrental.checkremaining')}}",
+
+                    success: function(response) {
+                        let property = response.property;
+                        if(property){
+                            var total_amount = ele('total_amount').value;
+                            var advanve = ele('advance').value;
+                            var remaining = total_amount - advanve;
+                            if(amount.value == remaining ){
+                                $('.checkout').prop("disabled", false); 
+                            }else{
+                                toastr.error(`Mr ${property.name} paying amount is not equal to remaining amount.`)
+                            }
+                        }
+
+                    }
+
+                });
+            }, existdelay, code)
+        })
     </script>
 @endsection
