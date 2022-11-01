@@ -102,11 +102,13 @@
                                                     <a href="{{ route('admin.propertyrental.edit', $item->id) }}"
                                                         class="btn btn-secondary" title="Extand">
                                                         <i class="fa fa-pencil"></i></a>
-                                                        @if (Auth::user()->hasRole('admin'))
+                                                    @if (Auth::user()->hasRole('admin'))
                                                         <a href="#" class="btn btn-danger dltbtn"><i
-                                                            class="fas fa-trash"></i></a>
-                                                        @endif
-                                                    <a href="{{route('admin.propertyrental.addpayment',$item->id)}}" class="btn btn-primary" title="Add Payment"><i class="fa fa-circle-plus"></i></a>        
+                                                                class="fas fa-trash" title="Delete"></i></a>
+                                                    @endif
+                                                    <a data-toggle="modal" onclick="savedata({{ $item }});"
+                                                        data-target="#paymentModal" class="btn btn-primary"
+                                                        title="Add Payment"><i class="fa fa-circle-plus"></i></a>
                                                 </td>
                                             </tr>
                                             <iframe src="{{ route('admin.propertyrental.pdf', $item->id) }}"
@@ -158,7 +160,8 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="">Paid Amount</label>
-                                <input readonly class="form-control" type="text" name="advance" value="" id="advance">
+                                <input readonly class="form-control" type="text" name="advance" value=""
+                                    id="advance">
                             </div>
                         </div>
                     </div>
@@ -212,13 +215,51 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" onclick="storecheckout()" disabled class="btn btn-primary checkout"><i
-                            class="fa fa-rotate-right" ></i> Check
+                            class="fa fa-rotate-right"></i> Check
                         Out</button>
                 </div>
             </div>
         </div>
     </div>
-
+    {{-- Payment Modal --}}
+    <!-- Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Payment Modal</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="hidden" name="property_id" id="property_id" value="">
+                                <label for="">Payment Date</label><span class="text-danger">*</span>
+                                <input type="date" required class="form-control" name="date" value=""
+                                    id="pay_date">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="">Enter Amount</label><span class="text-danger">*</span>
+                                <input type="text" required class="form-control" name="amont" value=""
+                                    id="pay_amount">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="savepayment();" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('scripts')
     <script>
@@ -256,7 +297,7 @@
             ele('building_id').value = item.building_id;
             var remaining = ele('remaining').value = item.total_amount - item.advance;
             if (remaining != 0) {
-               
+
             }
         }
 
@@ -276,7 +317,7 @@
                 "remaining": ele('remaining').value,
                 "additional_charges": ele('additional_charges').value,
                 "payment_type": ele('payment_type').value,
-                "remain_receive" : ele('remain_receive').value,
+                "remain_receive": ele('remain_receive').value,
 
             };
             $.ajax({
@@ -355,7 +396,7 @@
             });
         });
 
-        
+
         const amount = ele('remain_receive');
         const existdelay = 2000;
         let existtimer;
@@ -365,21 +406,23 @@
                 $.ajax({
                     data: {
                         amount: amount.value,
-                        id:  ele('propertyrental_id').value,
+                        id: ele('propertyrental_id').value,
                     },
                     type: "POST",
-                    url: "{{route('admin.propertyrental.checkremaining')}}",
+                    url: "{{ route('admin.propertyrental.checkremaining') }}",
 
                     success: function(response) {
                         let property = response.property;
-                        if(property){
+                        if (property) {
                             var total_amount = ele('total_amount').value;
                             var advanve = ele('advance').value;
                             var remaining = total_amount - advanve;
-                            if(amount.value == remaining ){
-                                $('.checkout').prop("disabled", false); 
-                            }else{
-                                toastr.error(`Mr ${property.name} paying amount is not equal to remaining amount.`)
+                            if (amount.value == remaining) {
+                                $('.checkout').prop("disabled", false);
+                            } else {
+                                toastr.error(
+                                    `Mr ${property.name} paying amount is not equal to remaining amount.`
+                                )
                             }
                         }
 
@@ -388,5 +431,45 @@
                 });
             }, existdelay, code)
         })
+
+        const savedata = (item) => {
+            ele('property_id').value
+            ele('pay_date').value = '';
+            ele('pay_amount').value = '';
+            ele('property_id').value = item.id;
+        }
+        const savepayment = () => {
+
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            // AJAX request 
+            var data = {
+                "_token": "{{ csrf_token() }}",
+                "property_id": ele('property_id').value,
+                "date": ele('pay_date').value,
+                "amount": ele('pay_amount').value,
+            };
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('admin.propertyrental.addpayment') }}",
+                data: data,
+                success: function(response) {
+
+                    if (response.error) {
+                        toastr.error(response.error);
+                    } else {
+                        $('#paymentModal').modal('hide');
+                        toastr.success(response.success);
+                        window.setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    }
+                }
+            });
+        }
     </script>
 @endsection

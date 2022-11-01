@@ -37,4 +37,9 @@ class DashboardController extends Controller
 
         return response()->json(['room' => $room, 'vacantcount' => $vacantcount, 'occupiedcount' => $occupiedcount]);
     }
+
+    public function term()
+    {
+        return view('backend.admin.pages.dashboard.term');
+    }
 }

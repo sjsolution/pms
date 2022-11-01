@@ -67,7 +67,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->namespace('Backend\Admin'
 
     Route::post('check-remaining-amount', 'PropertyRentalDailyController@checkremaining')->name('propertyrental.checkremaining');
 
-    Route::get('/add-payment/{id}', 'PropertyRentalDailyController@addpayment')->name('propertyrental.addpayment');
+    Route::post('/add-payment', 'PropertyRentalDailyController@addpayment')->name('propertyrental.addpayment');
 
     //Property Rental Daily basis routes
     Route::resource('propertyrentaldaily', 'PropertyRentalDailyController');
@@ -99,4 +99,6 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->namespace('Backend\Admin'
 
     Route::get('payment-report-properties', 'ReportController@paymentproperty')->name('report.paymentproperty');
     Route::post('get-payment-report-properties', 'ReportController@getpaymentproperty')->name('report.getpaymentproperty');
+
+    Route::get('/terms-and-conditions', 'DashboardController@term')->name('dashboard.terms');
 });

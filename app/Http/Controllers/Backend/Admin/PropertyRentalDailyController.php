@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Building;
 use App\Models\Checkout;
 use App\Models\FlatType;
+use App\Models\PaymentTrack;
 use App\Models\PropertyRental;
 use App\Models\PropertyRentalDaily;
 use App\Models\Room;
@@ -23,7 +24,7 @@ class PropertyRentalDailyController extends Controller
      */
     public function index()
     {
-        $propertyrentaldaily = PropertyRental::where(['property_rental'=>1, 'deleted_at'=> null])->orderBy('id', 'desc')->get();
+        $propertyrentaldaily = PropertyRental::where(['property_rental' => 1, 'deleted_at' => null])->orderBy('id', 'desc')->get();
         if ($propertyrentaldaily) {
             return view('backend.admin.pages.propertyrentaldaily.index', compact('propertyrentaldaily'));
         }
@@ -36,13 +37,13 @@ class PropertyRentalDailyController extends Controller
      */
     public function create()
     {
-        if(Auth::user()->hasRole('admin')){
-            $building = Building::all();     
-        }else{
-            $user = User::where('id',user()->id)->first();
-            $building = Building::where('id',$user->property_id)->first();
+        if (Auth::user()->hasRole('admin')) {
+            $building = Building::all();
+        } else {
+            $user = User::where('id', user()->id)->first();
+            $building = Building::where('id', $user->property_id)->first();
         }
-        
+
         $flattype = FlatType::all();
         $room = Room::where('status', 1)->get();
         return view('backend.admin.pages.propertyrentaldaily.form', compact('building', 'flattype', 'room'));
@@ -151,7 +152,7 @@ class PropertyRentalDailyController extends Controller
     public function checkout(Request $request)
     {
         $propertyid = PropertyRental::find($request->propertyrental_id);
-        if($propertyid){
+        if ($propertyid) {
             $propertyid->status = 2;
             $propertyid->save();
             $roomid = $propertyid->room_id;
@@ -159,32 +160,40 @@ class PropertyRentalDailyController extends Controller
             $room->status = !$room->status;
             $room->save();
             $checkout = Checkout::create($request->all());
-            if($checkout){
+            if ($checkout) {
                 return response()->json(['checkout' => $checkout]);
             }
         }
-       
     }
 
-    public function pdf(Request $request, $id){
+    public function pdf(Request $request, $id)
+    {
         $propertyrentaldaily = PropertyRentalDaily::find($id);
 
         return view('backend.admin.pages.propertyrentaldaily.pdf_view', compact('propertyrentaldaily'));
     }
 
-    public function checkremaining(Request $request){
+    public function checkremaining(Request $request)
+    {
         $property = PropertyRental::find($request->id);
-        return response()->json(['property'=>$property]);
+        return response()->json(['property' => $property]);
     }
 
-    public function addpayment(Request $request, $id){
-        $building = Building::all();
-        $flattype = FlatType::all();
-        $room = Room::all();
-        $propertyrental  = PropertyRental::find($id);
-        if($propertyrental ){
-            return view('backend.admin.pages.propertyrentaldaily.payment', compact('propertyrental','building','flattype','room'));
+    public function addpayment(Request $request)
+    {
+        if ($request->data == null && $request->amount == null) {
+            return response()->json(['error'=>'Please Enter Required Fields']);
+        } else {
+            $property = PropertyRental::find($request->property_id);
+            $advance  = $property->advance;
+            $installamount = $request->amount;
+            $final = $advance + $installamount;
+            $property->advance = $final;
+            $property->save();
+            $payment = PaymentTrack::create($request->all());
+            if ($payment) {
+                return response()->json(['success' => 'Payment added sucessfully']);
+            }
         }
     }
-
 }

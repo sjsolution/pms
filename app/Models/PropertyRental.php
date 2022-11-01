@@ -39,4 +39,8 @@ class PropertyRental extends Model
     {
         return $this->hasone(Checkout::class, 'propertyrental_id', 'id');
     }
+    public function paymenttrack()
+    {
+        return $this->hasMany(PaymentTrack::class, 'property_id', 'id');
+    }
 }
