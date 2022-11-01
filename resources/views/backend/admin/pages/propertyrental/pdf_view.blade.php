@@ -10,7 +10,7 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
         .building {
-            margin-top: 90px;
+            margin-top: 20px;
             text-align: center;
             font-size: 30px;
             color: LightGray;
@@ -44,6 +44,11 @@
             float: left;
         }
 
+        .col-sm-12 {
+            width: 100%;
+            float: left;
+        }
+
         p {
             font-size: 16px;
         }
@@ -66,6 +71,55 @@
             font-size: 29px;
             font-weight: bolder;
         }
+
+        .admin-board {
+            width: 100%;
+            height: auto;
+        }
+
+        .board-lft {
+            width: 50%;
+            height: auto;
+            font-weight: 600;
+            border: 1px solid black;
+            font-size: 13px;
+        }
+
+        .board-lft ul {
+            padding-top: 18px
+        }
+
+        .board-rt {
+            width: 50%;
+            height: auto;
+            font-weight: 600;
+            border: 1px solid black;
+            font-size: 13px;
+        }
+
+        .board-rt ul {
+            padding-top: 18px
+        }
+
+
+        @media print {
+            .align-total {
+                display: flex;
+                -webkit-print-color-adjust: exact;
+            }
+
+            .details-rt {
+                width: 50%;
+                display: flex;
+            }
+
+            .details-lft {
+                width: 50%;
+                display: flex;
+                gap: 50px;
+                
+            }
+        }
     </style>
 </head>
 
@@ -73,6 +127,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
+
+
     <div class="container-fluid">
         <div class="row" class="">
             <div class="col-md-12">
@@ -126,76 +182,93 @@
             </div>
         </div>
         <hr class="solid1">
-        <div class="row">
-            <div class="col-md-4">
-                <p>Booking Date:</p>
+        <div class="row align-total">
+            {{-- left col --}}
+            <div class="details-rt">
+                <div class="row">
+                    <div class="col-md-6">
+                        @php
+                            $book = $propertyrentaldaily->start_date;
+                        @endphp
+                        Booking Date: &emsp;&emsp;&emsp;&emsp;{{ date('M d, Y', strtotime($book)) }}
+                    </div>
+                    <div class="col-md-6">
+                        Flat Type: &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;{{ $propertyrentaldaily->flattype->name }}
+                    </div>
+                    <div class="col-md-6">
+                        Room ID: &emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&emsp;{{ $propertyrentaldaily->room->id }}
+                    </div>
+                    <div class="col-md-6">
+                        Document No: &emsp;&emsp;&nbsp;&nbsp;&nbsp;&emsp;{{ $propertyrentaldaily->document_no }}
+                    </div>
+                    <div class="col-md-6">
+                        Document Type: &emsp;&emsp;&emsp;{{ $propertyrentaldaily->document_type }}
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4">
-                @php
-                    $book = $propertyrentaldaily->start_date;
-                @endphp
-                <p class="font-size">{{ date('M d, Y', strtotime($book)) }}</p>
+            {{-- left col --}}
+            {{-- Right col --}}
+            <div class="details-lft">
+                <div class="row">
+                    <div class="col-md-6">
+                        Total Amount: &emsp;&emsp;&emsp;&emsp;{{ $propertyrentaldaily->total_amount }}
+                        &emsp;<span>&#65020;</span>
+                    </div>
+                    <div class="col-md-6">
+                        @foreach ($propertyrentaldaily->paymenttrack as $item)
+                            {{ $item->date }}&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;{{ $item->amount }}&emsp;&emsp;<span>&#65020;</span>
+                            <br>
+                        @endforeach
+                    </div>
+                    <div class="col-md-6">
+                        Amount Paid: &emsp;&emsp;&emsp;&emsp;&nbsp;{{ $propertyrentaldaily->advance }}
+                        &emsp;<span>&#65020;</span>
+                    </div>
+                    <div class="col-md-6">
+                        <hr class="solid1">
+                    </div>
+                    <div class="col-md-6">
+                        @php
+                            $remain = $propertyrentaldaily->total_amount - $propertyrentaldaily->advance;
+                        @endphp
+                        Remaining: &emsp;&emsp;&emsp;&emsp;&emsp;{{ $remain }} &emsp;&emsp;<span>&#65020;
+                    </div>
+                </div>
             </div>
-            <div class="col-md-2">
-                <p>Total Amount:</p>
-            </div>
-            <div class="col-md-2">
-                <p>{{ $propertyrentaldaily->total_amount }} Rs.</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <p>Flat Type:</p>
-            </div>
-            <div class="col-md-4">
-                <p class="font-size">{{ $propertyrentaldaily->flattype->name }}</p>
-            </div>
-            <div class="col-md-2">
-                <p>Amount Paid:</p>
-            </div>
-            <div class="col-md-2">
-                <p>{{ $propertyrentaldaily->total_amount }} Rs.</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <p>Room ID:</p>
-            </div>
-            <div class="col-md-4">
-                <p class="font-size">{{ $propertyrentaldaily->room->id }}</p>
-            </div>
-            <div class="col-md-4">
-                <hr class="solid1">
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <p>Document No:</p>
-            </div>
-            <div class="col-md-4">
-                <p class="font-size">{{ $propertyrentaldaily->document_no }}</p>
-            </div>
-            <div class="col-md-2">
-                <p>Remaining:</p>
-            </div>
-            <div class="col-md-2">
-                @php
-                    $remain = $propertyrentaldaily->total_amount - $propertyrentaldaily->advance;
-                @endphp
-                <p>{{ $remain }} Rs.</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <p>Document Type:</p>
-            </div>
-            <div class="col-md-4">
-                <p class="font-size">{{ $propertyrentaldaily->document_type }}</p>
-            </div>
+            {{-- Right col --}}
         </div>
         <hr class="solid1">
+        <footer>
+            <div class="row admin-board">
+                <div class="board-lft">
+                    <ul>
+                        <li> WE ARE KINDLY INFORMING YOU THAT
+                            CHECK OUT TIME IS FROM 12 NOON TO 2 PM.</li>
+                        <li>THE HOTEL IS NOT RESPONSIBLE FOR
+                            ACCIDENTS OR INJURIES THAT OCCUR
+                            TO GUESTS, LOSS OF MONEY JEWELLERY OR ANY
+                            KIND OF VALUABLE ITEMS.</li>
+                        <li>GUEST WILL BE RESPONSIBLE
+                            FOR ANY DAMAGE TO THE HOTEL OR FURNITURE
+                            DURING THE THE STAY AT THE HOTEL.</li>
+
+                    </ul>
+                </div>
+                <div class="board-rt">
+                    <ul>
+                        <li>نحن نتفضل إخبإركم نن وعد لموار ك وع ون لمالرد 12 إلمى
+                            2 ظهكل</li>
+                        <li>لمفن ق ميس واللع دن لمحعل ث لمتي تح ث ملنزأل لع فق لن
+                            لألوعل نع لموجعوكلت نع لي ون لالشيرء لمثوينة</li>
+                        <li>مإنزي الع يمعن واللع دن ني نضلكلك إرمفن ق نع لألثرث
+                            نثنرء فتكة لألقروة إرمفن ق</li>
+
+                    </ul>
+                </div>
+            </div>
+        </footer>
     </div>
+
 
     @include('backend.admin.layouts.scripts')
 </body>

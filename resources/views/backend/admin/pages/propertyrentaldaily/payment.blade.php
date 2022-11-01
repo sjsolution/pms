@@ -135,7 +135,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <label for="">End Date</label><span class="text-danger">*</span>
-                                            <input type="text" id="end_date" name="end_date"
+                                            <input readonly type="text" id="end_date" name="end_date"
                                                 value="{{ isset($propertyrental->end_date) ? $propertyrental->end_date : '' }}"
                                                 class="form-control" value="" />
                                         </div>
@@ -158,7 +158,7 @@
                                             <div class="form-group">
                                                 <label for="advance">Advance Payment</label><span
                                                     class="text-danger">*</span>
-                                                <input readonly type="text" required name="advance"
+                                                <input  type="text" required name="advance"
                                                     value="{{ isset($propertyrental->advance) ? $propertyrental->advance : '' }}"
                                                     class="form-control"  id="advance"
                                                     placeholder="Advance Payment">
