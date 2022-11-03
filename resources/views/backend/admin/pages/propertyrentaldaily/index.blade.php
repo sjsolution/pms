@@ -78,7 +78,7 @@
                                                 <td>{{ $item->room->room_no }}</td>
                                                 <td>{{ $item->flattype->name }}</td>
                                                 <td>{{ $item->name }}</td>
-                                                <td>{{ $item->advance }}</td>
+                                                <td>{{ $item->paymenttrack->sum('amount') }}</td>
                                                 <td>{{ $item->total_amount }}</td>
                                                 <td>{{ $item->start_date }}-{{ $item->end_date }}</td>
                                                 <td>
@@ -86,9 +86,9 @@
                                                     @if ($item->status == 1)
                                                         <span class="badge badge-success">Checked-In</span>
                                                     @elseif($item->status == 2)
-                                                        <span class="badge badge-info">Checked Out</span>
+                                                        <span class="badge badge-danger">Checked Out</span>
                                                     @else
-                                                        <span class="badge badge-danger">Not Checked-In</span>
+                                                        <span class="badge badge-info">Not Checked-In</span>
                                                     @endif
                                                 </td>
                                                 <td><a href="{{ route('admin.propertyrental.show', $item->id) }}"

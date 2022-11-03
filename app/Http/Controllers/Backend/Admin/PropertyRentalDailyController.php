@@ -182,17 +182,14 @@ class PropertyRentalDailyController extends Controller
     public function addpayment(Request $request)
     {
         if ($request->data == null && $request->amount == null) {
-            return response()->json(['error'=>'Please Enter Required Fields']);
+            return response()->json(['error' => 'Please Enter Required Fields']);
         } else {
             $property = PropertyRental::find($request->property_id);
-            $advance  = $property->advance;
-            $installamount = $request->amount;
-            $final = $advance + $installamount;
-            $property->advance = $final;
-            $property->save();
-            $payment = PaymentTrack::create($request->all());
-            if ($payment) {
-                return response()->json(['success' => 'Payment added sucessfully']);
+            if ($property) {
+                $payment = PaymentTrack::create($request->all());
+                if ($payment) {
+                    return response()->json(['success' => 'Payment added sucessfully']);
+                }
             }
         }
     }

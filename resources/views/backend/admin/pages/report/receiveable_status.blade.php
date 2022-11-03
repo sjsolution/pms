@@ -122,7 +122,7 @@
                                 var property_rental = response['property'][i].property_rental;
                                 var monthly_rent = response['property'][i].monthly_rent;
 
-                                var advance = response['property'][i].advance;
+                                var advance = response['property'][i].paymenttrack_sum_amount;
                                 var total_amount = response['property'][i].total_amount;
                                 var tenant_pay_amount = response['property'][i]
                                     .tenant_pay_amount;
@@ -153,9 +153,9 @@
                                     if (advance == total_amount) {
                                         var receiveable = '0';
                                     } else {
-                                        toastr.error(`${name} has remaining amount`);
                                         var remaining = total_amount - advance;
                                         var receiveable = remaining;
+                                        toastr.error(`${name} has remaining amount`);
                                     }
                                 }
                                 var html = `<tr>

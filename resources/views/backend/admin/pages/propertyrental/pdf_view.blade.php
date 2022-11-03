@@ -221,15 +221,15 @@
                         @endforeach
                     </div>
                     <div class="col-md-6">
-                        Amount Paid: &emsp;&emsp;&emsp;&emsp;&nbsp;{{ $propertyrentaldaily->advance }}
-                        &emsp;<span>&#65020;</span>
+                        Amount Paid: &emsp;&emsp;&emsp;&emsp;&nbsp;{{ $propertyrentaldaily->paymenttrack->sum('amount') }}
+                        &emsp;&nbsp;&nbsp;<span>&#65020;</span>
                     </div>
                     <div class="col-md-6">
                         <hr class="solid1">
                     </div>
                     <div class="col-md-6">
                         @php
-                            $remain = $propertyrentaldaily->total_amount - $propertyrentaldaily->advance;
+                            $remain = $propertyrentaldaily->total_amount - $propertyrentaldaily->paymenttrack->sum('amount');
                         @endphp
                         Remaining: &emsp;&emsp;&emsp;&emsp;&emsp;{{ $remain }} &emsp;&emsp;<span>&#65020;
                     </div>

@@ -146,23 +146,23 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        {{-- <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="advance">Advance Payment</label><span
-                                                    class="text-danger">*</span>
-                                                <input type="text" required name="advance" value=""
+                                                    class="text-danger"></span>
+                                                <input type="text"  name="advance" value=""
                                                     class="form-control" id="advance" placeholder="Advance Payment">
                                                 @if ($errors->any())
                                                     <p class="text-danger">{{ $errors->first('advance') }}</p>
                                                 @endif
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="room_rate">Room Rate</label><span class="text-danger">*</span>
                                                 <input type="text" required name="room_rate" value=""
                                                     class="form-control" id="room_rate" onkeyup="mutliplyamount()"
-                                                    placeholder="Advance Payment">
+                                                    placeholder="">
                                                 @if ($errors->any())
                                                     <p class="text-danger">{{ $errors->first('room_rate') }}</p>
                                                 @endif

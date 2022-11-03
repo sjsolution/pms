@@ -32,7 +32,7 @@ class ReportController extends Controller
         $toDate = $date[1];
         $start = Carbon::parse($fromDate)->toDateString();
         $end = Carbon::parse($toDate)->toDateString();
-        $property = PropertyRental::withTrashed()->with('room','charges')->where(['building_id' => $building_id, 'property_rental' => 1])
+        $property = PropertyRental::withTrashed()->with('room','charges')->withSum('paymenttrack','amount')->where(['building_id' => $building_id, 'property_rental' => 1])
             ->whereBetween('created_at', [$start, $end])->get();
         $daily_total = $property->sum('total_amount');
         $checkout = Checkout::where('building_id', $building_id)->get();
@@ -77,7 +77,7 @@ class ReportController extends Controller
     public function getreceiveable_status(Request $request)
     {
         $building_id = $request->building_id;
-        $property = PropertyRental::withTrashed()->with('building', 'flattype', 'room')->where(['building_id' => $building_id])->orderBy('id', 'desc')->get();
+        $property = PropertyRental::withTrashed()->with('building', 'flattype', 'room')->withSum('paymenttrack','amount')->where(['building_id' => $building_id])->orderBy('id', 'desc')->get();
         return response()->json(['property' => $property, 'mesg' => 'fetched successfully']);
     }
 

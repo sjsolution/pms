@@ -168,9 +168,14 @@
                             var property_rental = response['property'][i].property_rental;
                             var name = response['property'][i].name;
                             var status = response['property'][i].status;
-                            var payable = response['property'][i].advance;
-                            var charges = response['property'][i].charges.additional_charges;
-
+                            var payable = response['property'][i].paymenttrack_sum_amount;
+                            var charges = response['property'][i].charges?.additional_charges;
+                            if (charges == undefined) {
+                                var charges = '0';
+                            }
+                            if(payable == null){
+                                var payable = '0';
+                            }    
                             var total_amount = response['property'][i].total_amount;
                             if (payable == total_amount) {
                                 var receiveable = '0';
@@ -200,5 +205,6 @@
 
             });
         }
+
     </script>
 @endsection

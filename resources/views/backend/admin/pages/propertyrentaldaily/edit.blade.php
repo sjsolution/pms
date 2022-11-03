@@ -154,11 +154,11 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        {{-- <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="advance">Advance Payment</label><span
-                                                    class="text-danger">*</span>
-                                                <input readonly type="text" required name="advance"
+                                                    class="text-danger"></span>
+                                                <input readonly type="text"  name="advance"
                                                     value="{{ isset($propertyrental->advance) ? $propertyrental->advance : '' }}"
                                                     class="form-control"  id="advance"
                                                     placeholder="Advance Payment">
@@ -166,7 +166,7 @@
                                                     <p class="text-danger">{{ $errors->first('advance') }}</p>
                                                 @endif
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="room_rate">Room Rate</label><span class="text-danger">*</span>
